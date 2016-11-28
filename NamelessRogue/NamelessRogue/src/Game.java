@@ -12,9 +12,10 @@ public class Game {
 
 	// The window handle
 	private long window;
-
+	private GameSettings config;
+	private Scene currentScene;
 	public void run() {
-		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
+		System.out.println("Nameless rogue");
 
 		try {
 			init();
@@ -44,11 +45,11 @@ public class Game {
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
-		int WIDTH = 300;
-		int HEIGHT = 300;
+		//TODO: later extract values from cfg
+		config = new GameSettings(800,600);
 
 		// Create the window
-		window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", NULL, NULL);
+		window = glfwCreateWindow(config.getWidth(), config.getHeight(), "Hello World!", NULL, NULL);
 		if ( window == NULL )
 			throw new RuntimeException("Failed to create the GLFW window");
 
@@ -63,8 +64,8 @@ public class Game {
 		// Center our window
 		glfwSetWindowPos(
 			window,
-			(vidmode.width() - WIDTH) / 2,
-			(vidmode.height() - HEIGHT) / 2
+			(vidmode.width() - config.getWidth()) / 2,
+			(vidmode.height() -  config.getHeight()) / 2
 		);
 
 		// Make the OpenGL context current
@@ -74,6 +75,11 @@ public class Game {
 
 		// Make the window visible
 		glfwShowWindow(window);
+		
+		
+		//lets setup a simple ingame Scene for now
+		currentScene = new GameScene(this);
+		
 	}
 
 	private void loop() {
@@ -84,9 +90,10 @@ public class Game {
 		// bindings available for use.
 		GL.createCapabilities();
 
-		// Set the clear color
-		glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
-
+		currentScene.update();
+		currentScene.draw();
+		
+	
 		// Run the rendering loop until the user has attempted to close
 		// the window or has pressed the ESCAPE key.
 		while ( !glfwWindowShouldClose(window) ) {
@@ -99,6 +106,11 @@ public class Game {
 			glfwPollEvents();
 		}
 	}
+	
+	
+	private void update(){
+	}
+	
 
 	
 
