@@ -1,117 +1,75 @@
+ import com.jogamp.opengl.GL3;
+import com.jogamp.opengl.GL4;
+import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLEventListener;
+import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.awt.GLCanvas;
+import com.jogamp.opengl.util.awt.TextRenderer;
 
-import org.lwjgl.*;
-import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.*;
+import java.awt.Color;
+import java.awt.Font;
 
-import static org.lwjgl.glfw.Callbacks.*;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import javax.swing.JFrame;
+  
+  public class Game extends JFrame implements GLEventListener {
+      private static final long serialVersionUID = 1L;
+  
+      
 
-public class Game {
+           final private int width = 800;
+           final private int height = 600;
+       
+           public Game() {
+        	            super("HelloWorld");
+        	            GLProfile profile = GLProfile.getDefault();
+        	            GLCapabilities capabilities = new GLCapabilities(profile);
+        	    
+        	            GLCanvas canvas = new GLCanvas(capabilities);
+        	            canvas.addGLEventListener(this);
+        	    
+        	            this.setName("Minimal OpenGL");
+        	            this.getContentPane().add(canvas);
+        	    
+        	            this.setSize(width, height);
+        	            this.setLocationRelativeTo(null);
+        	            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        	            this.setVisible(true);
+        	            this.setResizable(false);
+        	            canvas.requestFocusInWindow();
+        	        }
+      
+      @Override
+      public void display(GLAutoDrawable drawable) {
+    	   GL3 gl = drawable.getGL().getGL3();
+    	   gl.glClear(GL3.GL_COLOR_BUFFER_BIT | GL3.GL_DEPTH_BUFFER_BIT);
+    	    
+    	   // call your draw code here
+    	   TextRenderer textRenderer = new TextRenderer(new Font("Verdana", Font.BOLD, 12));
+    	   textRenderer.beginRendering(900, 700);
+    	   textRenderer.setColor(Color.YELLOW);
+    	   textRenderer.setSmoothing(true);
 
-	// The window handle
-	private long window;
-	private GameSettings config;
-	private Scene currentScene;
-	public void run() {
-		System.out.println("Nameless rogue");
-
-		try {
-			init();
-			loop();
-
-			// Free the window callbacks and destroy the window
-			glfwFreeCallbacks(window);
-			glfwDestroyWindow(window);
-		} finally {
-			// Terminate GLFW and free the error callback
-			glfwTerminate();
-			glfwSetErrorCallback(null).free();
-		}
-	}
-
-	private void init() {
-		// Setup an error callback. The default implementation
-		// will print the error message in System.err.
-		GLFWErrorCallback.createPrint(System.err).set();
-
-		// Initialize GLFW. Most GLFW functions will not work before doing this.
-		if ( !glfwInit() )
-			throw new IllegalStateException("Unable to initialize GLFW");
-
-		// Configure our window
-		glfwDefaultWindowHints(); // optional, the current window hints are already the default
-		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
-
-		//TODO: later extract values from cfg
-		config = new GameSettings(800,600);
-
-		// Create the window
-		window = glfwCreateWindow(config.getWidth(), config.getHeight(), "Hello World!", NULL, NULL);
-		if ( window == NULL )
-			throw new RuntimeException("Failed to create the GLFW window");
-
-		// Setup a key callback. It will be called every time a key is pressed, repeated or released.
-		glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-			if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-				glfwSetWindowShouldClose(window, true); // We will detect this in our rendering loop
-		});
-
-		// Get the resolution of the primary monitor
-		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		// Center our window
-		glfwSetWindowPos(
-			window,
-			(vidmode.width() - config.getWidth()) / 2,
-			(vidmode.height() -  config.getHeight()) / 2
-		);
-
-		// Make the OpenGL context current
-		glfwMakeContextCurrent(window);
-		// Enable v-sync
-		glfwSwapInterval(1);
-
-		// Make the window visible
-		glfwShowWindow(window);
-		
-		
-		//lets setup a simple ingame Scene for now
-		currentScene = new GameScene(this);
-		
-	}
-
-	private void loop() {
-		// This line is critical for LWJGL's interoperation with GLFW's
-		// OpenGL context, or any context that is managed externally.
-		// LWJGL detects the context that is current in the current thread,
-		// creates the GLCapabilities instance and makes the OpenGL
-		// bindings available for use.
-		GL.createCapabilities();
-
-		currentScene.update();
-		currentScene.draw();
-		
-	
-		// Run the rendering loop until the user has attempted to close
-		// the window or has pressed the ESCAPE key.
-		while ( !glfwWindowShouldClose(window) ) {
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-
-			glfwSwapBuffers(window); // swap the color buffers
-
-			// Poll for window events. The key callback above will only be
-			// invoked during this call.
-			glfwPollEvents();
-		}
-	}
-	
-	
-	private void update(){
-	}
-	
-
-	
-
-}
+    	   textRenderer.draw("Hello world!!", 0, 0);
+    	   textRenderer.endRendering();
+    	   gl.glFlush();
+      }
+      
+      public void play() {
+      }
+ 
+     @Override
+     public void dispose(GLAutoDrawable drawable) {
+     }
+ 
+     @Override
+     public void init(GLAutoDrawable drawable) {
+    	 GL3 gl = drawable.getGL().getGL3();
+    	   gl.glClearColor(0.392f, 0.584f, 0.929f, 1.0f);
+     }
+ 
+     @Override
+     public void reshape(GLAutoDrawable drawable, int x, int y, int width,
+             int height) {
+     }  
+  }
