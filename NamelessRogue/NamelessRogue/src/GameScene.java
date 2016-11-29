@@ -9,7 +9,8 @@ import com.jogamp.opengl.util.awt.TextRenderer;
 
 public class GameScene extends Scene {
 
-
+	Font font = null;
+	TextRenderer textRenderer;
 	public GameScene(Game game) {
 		super(game);
 		
@@ -27,16 +28,8 @@ public class GameScene extends Scene {
 				}
 			}
 		}
-	}
-
-	@Override
-	public void update() {
-	}
-
-	@Override
-	public void draw() {
-	   //TODO: move drawing from this text renderer to tile rendering;
-		Font font = null;
+		
+		
 		try {
 			font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("Resources/square.ttf"));
 			font = font.deriveFont(Font.PLAIN, settings.getFontSize());
@@ -46,7 +39,17 @@ public class GameScene extends Scene {
 		}
 	   
 	 
-	   TextRenderer textRenderer = new TextRenderer(font);
+		textRenderer = new TextRenderer(font);
+	}
+
+	@Override
+	public void update() {
+	}
+
+	@Override
+	public void draw() {
+	   //TODO: move drawing from this text renderer to tile rendering;
+
    	   textRenderer.beginRendering(settings.getWidth(), settings.getHeight());
    	   textRenderer.setColor(Color.WHITE);
    	   textRenderer.setSmoothing(true);
