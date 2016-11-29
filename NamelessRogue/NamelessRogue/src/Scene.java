@@ -6,10 +6,14 @@ public abstract class Scene {
 	//and every scene has a screen buffer
 	public char screenBuffer[][];
 	
+	protected int bufferSizeRows = 20;
+	protected int buferSizeColumns = 20;
+	protected GameSettings settings;
 	public Scene(Game game) {
 		gameInstance = game;
-		//for now 100x100, later it will be dynamic, depending on the screen resolution;
-		screenBuffer = new char[100][100];
+		//for now its fixed, later it will be dynamic, depending on the screen resolution;
+		screenBuffer = new char[bufferSizeRows][buferSizeColumns];
+		settings = gameInstance.getSettings();
 	}
 	//here scene updates game logic
 	public abstract void update();
