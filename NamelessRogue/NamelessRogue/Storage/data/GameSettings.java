@@ -1,8 +1,9 @@
+package data;
 import java.awt.*;
 public class GameSettings {
 	//window resolution
-	private int width;
-	private int height;
+	private int widthChars;
+	private int heightChars;
 	private int fontSize = 12;
 	//some font
 	private Font  font;
@@ -13,16 +14,16 @@ public class GameSettings {
 	}
 	
 	public int getWidth() {
-		return width;
+		return widthChars;
 	}
 	public void setWidth(int width) {
-		this.width = width;
+		this.widthChars = width;
 	}
 	public int getHeight() {
-		return height;
+		return heightChars;
 	}
 	public void setHeight(int height) {
-		this.height = height;
+		this.heightChars = height;
 	}
 
 	public int getFontSize() {

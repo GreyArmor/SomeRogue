@@ -1,3 +1,4 @@
+package shell;
  import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GL4;
@@ -9,6 +10,11 @@ import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.awt.TextRenderer;
+
+import Engine.GameScene;
+import abstraction.Scene;
+import data.GameSettings;
+
 import com.jogamp.opengl.util.*;
 import java.awt.Color;
 import java.awt.Font;
@@ -17,8 +23,7 @@ import javax.swing.JFrame;
  
   public class Game extends JFrame implements GLEventListener {
       private static final long serialVersionUID = 1L;
-      final private int width = 800;
-      final private int height = 600;
+     
       private GameSettings settings;
       
       
@@ -34,8 +39,12 @@ import javax.swing.JFrame;
     	 
     	  this.setName("Nameless rogue");
     	  this.getContentPane().add(canvas);
-    	  
-    	  this.setSize(width, height);
+    	  //TODO: move to config later
+    	  final int width = 60;
+          final int height = 40;
+    	  settings = new GameSettings(width, height);
+  
+    	  this.setSize(width*settings.getFontSize(), height* settings.getFontSize());
     	  this.setLocationRelativeTo(null);
     	  this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	  this.setVisible(true);
@@ -43,13 +52,22 @@ import javax.swing.JFrame;
   
     	  canvas.requestFocusInWindow();
     	
-    	  setSettings(new GameSettings(width, height));
+    	  
     	  currentScene = new GameScene(this);
     	
     	  FPSAnimator animator = new FPSAnimator(60);
           animator.add(canvas);
           animator.start();
     	  
+      }
+      
+      public int getActualWidth()
+      {
+    	  return settings.getWidth()*settings.getFontSize();
+      }
+      public int getActualHeight()
+      {
+    	  return settings.getHeight()*settings.getFontSize();
       }
       
       
@@ -93,7 +111,7 @@ import javax.swing.JFrame;
 
 
 
-	GameSettings getSettings() {
+	public GameSettings getSettings() {
 		return settings;
 	}
 
