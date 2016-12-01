@@ -2,10 +2,12 @@ package Engine;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Random;
 
+import com.jogamp.nativewindow.util.Point;
 import com.jogamp.opengl.util.awt.TextRenderer;
 
 import abstraction.Scene;
@@ -17,9 +19,10 @@ public class GameScene extends Scene {
 	Font font = null;
 	TextRenderer textRenderer;
 	ConsoleCamera camera;
+	private World world;
 	public GameScene(Game game) {
 		super(game);
-		
+/*		
 		for(int i = 0;i<settings.getHeight();i++)
 		{
 			for(int j = 0;j<settings.getWidth();j++)
@@ -34,7 +37,9 @@ public class GameScene extends Scene {
 				}
 			}
 		}
-		
+		*/
+		camera = new ConsoleCamera(this,new Point(0,0));
+		world = new World();
 		
 		try {
 			font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("Resources/square.ttf"));
@@ -55,9 +60,40 @@ public class GameScene extends Scene {
 	@Override
 	public void draw() {
 	   
+		
+		fillScreenbuffersWithWorld();		
 		renderScreen();
 		
    	 
+	}
+	
+	void fillScreenbuffersWithWorld(){
+		int camX = camera.getPosition().getX();
+		int camY = camera.getPosition().getY();
+		for(int x = camX; x<settings.getWidth()+camX; x++){
+		   for(int y = camY; y<settings.getHeight()+camY; y++){
+			   Tile tileToDraw = world.getTile(x, y);
+			   Point screenPoint = camera.PointToScreen(x,y);
+			   int screenX = screenPoint.getX();
+			   int screenY = screenPoint.getY();
+			   if(tileToDraw.getTerrainType()==TerrainTypes.Water)
+			   {		      
+				   screenBuffer[screenPoint.getX()][screenPoint.getY()]='~';
+				   screenColorBuffer[screenPoint.getX()][screenPoint.getY()]= new Color(0, 128, 128);	
+			   }
+			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Road)
+			   {
+				   screenBuffer[screenPoint.getX()][screenPoint.getY()]='.';
+				   screenColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.GRAY;
+			   }
+			   else
+			   {
+				   screenBuffer[screenPoint.getX()][screenPoint.getY()]=' ';
+				   screenColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.black;
+			   }
+			   
+		   }
+		}
 	}
 	
 	void renderScreen()
@@ -65,23 +101,47 @@ public class GameScene extends Scene {
 		//TODO: move drawing from this text renderer to tile rendering;
 	   textRenderer.beginRendering(gameInstance.getActualWidth(), gameInstance.getActualHeight());
 	   textRenderer.setColor(Color.gray);
-	   textRenderer.setSmoothing(true);
+	   textRenderer.setSmoothing(false);
 
 	   Random rand = new Random();
-	   for(int i = 0;i<settings.getHeight();i++)
-	   {
-		for(int j = 0;j<settings.getWidth();j++)
-		{
-				
+	   for(int x = 0; x<settings.getWidth(); x++){
+		   for(int y = 0; y<settings.getHeight(); y++){				
 				/*float r = rand.nextFloat();
 				float g = rand.nextFloat();
 				float b = rand.nextFloat();
-				Color randomColor = new Color(r, g, b);
-				textRenderer.setColor(randomColor);*/
-		
-			textRenderer.draw(String.valueOf(screenBuffer[i][j]), (j)*settings.getFontSize(),  (i)*settings.getFontSize());			
-			}
+				Color randomColor = new Color(r, g, b);*/	
+				textRenderer.setColor(screenColorBuffer[x][y]);	
+				textRenderer.draw(String.valueOf(screenBuffer[x][y]), (x+1)*settings.getFontSize(),  (y+1)*settings.getFontSize());			
+		   }
 	   }
 	   textRenderer.endRendering();
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		Point p = camera.getPosition();
+		int keyCode = e.getKeyCode();
+		    switch( keyCode ) { 
+		        case KeyEvent.VK_UP:
+		        	p.setY(p.getY()+1);
+		        	camera.setPosition(p);
+		            break;
+		        case KeyEvent.VK_DOWN:
+		        	p.setY(p.getY()-1);
+		        	camera.setPosition(p);
+		            break;
+		        case KeyEvent.VK_LEFT:
+		        	p.setX(p.getX()-1);
+		        	camera.setPosition(p);
+		            break;
+		        case KeyEvent.VK_RIGHT :
+		        	p.setX(p.getX()+1);
+		        	camera.setPosition(p);
+		            break;
+		     }	
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 	}
 }

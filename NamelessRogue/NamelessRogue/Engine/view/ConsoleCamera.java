@@ -11,19 +11,39 @@ public class ConsoleCamera {
 	//position is a bottom left corner of camera
 	public ConsoleCamera(GameScene scene, Point position)
 	{
-		this.position = position;
+		this.setPosition(position);
 		this.scene = scene;
 	}
 	
 	
 	public Point PointToScreen(Point p)	{
 		Point result = new Point();
-		result.setX(Math.abs(Math.abs(position.getX()) - Math.abs(p.getX())));
-		result.setY(Math.abs(Math.abs(position.getY()) - Math.abs(p.getY())));
+		
+		int cameraX = position.getX();
+		int cameraY = position.getY();
+		int worldX = p.getX();
+		int worldY = p.getY();
+		int screenX = worldX - cameraX;
+		int screenY = worldY - cameraY;
+		
+		result.setX(screenX);
+		result.setY(screenY);
 		return result;
 	}
+	
+	
 	public Point PointToScreen(int x,int y)	{
 		return PointToScreen(new Point(x,y));
+	}
+
+
+	public Point getPosition() {
+		return position;
+	}
+
+
+	public void setPosition(Point position) {
+		this.position = position;
 	}
 	
 	

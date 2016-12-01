@@ -18,10 +18,11 @@ import data.GameSettings;
 import com.jogamp.opengl.util.*;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
  
-  public class Game extends JFrame implements GLEventListener {
+  public class Game extends JFrame implements GLEventListener,java.awt.event.KeyListener {
       private static final long serialVersionUID = 1L;
      
       private GameSettings settings;
@@ -36,6 +37,7 @@ import javax.swing.JFrame;
     	  
     	  GLCanvas canvas = new GLCanvas(capabilities);
     	  canvas.addGLEventListener(this);
+    	  canvas.addKeyListener(this);
     	 
     	  this.setName("Nameless rogue");
     	  this.getContentPane().add(canvas);
@@ -51,9 +53,10 @@ import javax.swing.JFrame;
     	  this.setResizable(false);
   
     	  canvas.requestFocusInWindow();
-    	
-    	  
+        	  
     	  currentScene = new GameScene(this);
+    	  
+
     	
     	  FPSAnimator animator = new FPSAnimator(60);
           animator.add(canvas);
@@ -70,6 +73,16 @@ import javax.swing.JFrame;
     	  return settings.getHeight()*settings.getFontSize();
       }
       
+      @Override
+      public void keyPressed(KeyEvent e) {
+         currentScene.keyPressed(e);
+      }
+
+      @Override
+      public void keyReleased(KeyEvent e) {
+    	  currentScene.keyReleased(e);
+
+      }
       
       
       @Override
@@ -119,5 +132,11 @@ import javax.swing.JFrame;
 
 	void setSettings(GameSettings settings) {
 		this.settings = settings;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}  
   }
