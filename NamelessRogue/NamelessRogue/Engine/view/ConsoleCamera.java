@@ -46,6 +46,11 @@ public class ConsoleCamera {
 		this.position = position;
 	}
 	
+	public void setPosition(int x, int y)
+	{
+		setPosition(new Point(x,y));
+	}
+	
 	
 
 }

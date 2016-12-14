@@ -6,6 +6,8 @@ public class Chunk {
 	private Point worldPositionBottomLeftCorner;
 
 	private Tile[][] chunkTiles;
+	private BoundingBox boundingBox;
+	
 		
 	public Point getWorldPosition() {
 		return worldPositionBottomLeftCorner;
@@ -17,6 +19,7 @@ public class Chunk {
 	
 	public Chunk(Point bottomLeftCornerWorld)
 	{
+		boundingBox = new BoundingBox(bottomLeftCornerWorld, new Point(bottomLeftCornerWorld.getX()+Constants.ChunkSize,bottomLeftCornerWorld.getY()+Constants.ChunkSize));
 		worldPositionBottomLeftCorner = bottomLeftCornerWorld;
 		chunkTiles = new Tile[Constants.ChunkSize][Constants.ChunkSize];		
 	}
@@ -31,9 +34,13 @@ public class Chunk {
 				{
 					chunkTiles[x][y] = new Tile(TerrainTypes.Road);
 				}
-				else
+				else if(x>Constants.ChunkSize/2)
 				{
 					chunkTiles[x][y] = new Tile(TerrainTypes.Water);
+				}
+				else
+				{
+					chunkTiles[x][y] = new Tile(TerrainTypes.Dirt);
 				}
 			}
 		}		
@@ -52,17 +59,7 @@ public class Chunk {
 		return isPointInside(p.getX(),p.getY());	
 	}
 	public boolean isPointInside(int x, int y) {
-		int bottomLeftX = worldPositionBottomLeftCorner.getX();
-		int bottomLeftY = worldPositionBottomLeftCorner.getY();
-		int topRightX = worldPositionBottomLeftCorner.getX() + Constants.ChunkSize;
-		int topRightY = worldPositionBottomLeftCorner.getY() + Constants.ChunkSize;
-		
-		if(x>=bottomLeftX && x<topRightX&&y>=bottomLeftY&&y<topRightY){
-			return true;
-		}
-		else{
-			return false;
-		}
+		return boundingBox.isPointInside(x,y);	
 	}
 
 	public Tile getTile(Point p) {
@@ -77,5 +74,18 @@ public class Chunk {
 		int localY = Math.abs(bottomLeftY - y);
 		
 		return chunkTiles[localX][localY];
+	}
+
+	public void setTile(int x, int y, Tile tile) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	BoundingBox getBoundingBox() {
+		return boundingBox;
+	}
+
+	void setBoundingBox(BoundingBox boundingBox) {
+		this.boundingBox = boundingBox;
 	}
 }

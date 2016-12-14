@@ -74,8 +74,6 @@ public class GameScene extends Scene {
 		   for(int y = camY; y<settings.getHeight()+camY; y++){
 			   Tile tileToDraw = world.getTile(x, y);
 			   Point screenPoint = camera.PointToScreen(x,y);
-			   int screenX = screenPoint.getX();
-			   int screenY = screenPoint.getY();
 			   if(tileToDraw.getTerrainType()==TerrainTypes.Water)
 			   {		      
 				   screenBuffer[screenPoint.getX()][screenPoint.getY()]='~';
@@ -85,6 +83,11 @@ public class GameScene extends Scene {
 			   {
 				   screenBuffer[screenPoint.getX()][screenPoint.getY()]='.';
 				   screenColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.GRAY;
+			   }
+			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Dirt)
+			   {
+				   screenBuffer[screenPoint.getX()][screenPoint.getY()]='&';
+				   screenColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.DARK_GRAY;
 			   }
 			   else
 			   {
@@ -111,7 +114,7 @@ public class GameScene extends Scene {
 				float b = rand.nextFloat();
 				Color randomColor = new Color(r, g, b);*/	
 				textRenderer.setColor(screenColorBuffer[x][y]);	
-				textRenderer.draw(String.valueOf(screenBuffer[x][y]), (x+1)*settings.getFontSize(),  (y+1)*settings.getFontSize());			
+				textRenderer.draw(String.valueOf(screenBuffer[x][y]), x*settings.getFontSize(), y*settings.getFontSize());			
 		   }
 	   }
 	   textRenderer.endRendering();

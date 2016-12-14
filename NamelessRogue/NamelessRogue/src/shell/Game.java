@@ -1,5 +1,6 @@
 package shell;
  import com.jogamp.newt.event.WindowEvent;
+import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -89,8 +90,8 @@ import javax.swing.JFrame;
       public void display(GLAutoDrawable drawable) {
     	  if(started)
     	  {
-       	   GL3 gl = drawable.getGL().getGL3();
-    	   gl.glClear(GL3.GL_COLOR_BUFFER_BIT | GL3.GL_DEPTH_BUFFER_BIT);
+       	   GL gl = drawable.getGL().getGL();
+    	   gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
     	   currentScene.update();
     	   currentScene.draw();
     	   gl.glFlush();
@@ -113,7 +114,7 @@ import javax.swing.JFrame;
  
      @Override
      public void init(GLAutoDrawable drawable) {
-    	   GL3 gl = drawable.getGL().getGL3();
+    	   GL gl = drawable.getGL().getGL();
     	   gl.glClearColor(0,0,0, 1.0f);
      }
  

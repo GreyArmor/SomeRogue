@@ -48,5 +48,26 @@ public class World {
 		}
 		return chunkOfPoint.getTile(x, y);	
 	}
+	
+	public boolean setTile(int x,int y, Tile tile)
+	{
+		Chunk chunkOfPoint = null;
+		for(Iterator<Chunk> i = chunks.values().iterator(); i.hasNext(); ) {
+			Chunk ch = i.next();
+			if(ch.isPointInside(x,y))
+			{
+				chunkOfPoint = ch;
+				break;
+			}
+		}
+		if(chunkOfPoint==null)
+		{
+			return false;
+		}
+		chunkOfPoint.setTile(x, y,tile);	
+		return true;
+	}
+	
+	
 
 }
