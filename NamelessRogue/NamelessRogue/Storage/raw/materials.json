@@ -2,12 +2,14 @@
     {
         "name"*: String - a name for the new material
         "description"*: String - a description of the material
-        "movecost": Interger 1-100 (100 being not passable at all) - how easy it is to pass through this material (not needed if Passable is false)
+        "movecost": Integer 1-100 (100 being not passable at all) - how easy it is to pass through this material (not needed if Passable is false)
         "passable"*:Boolean - whether it is possible to move through this material
-        "fertility": Interger 1-100 (100 being fully fertile) - How fertile this tile is
+        "fertility": Integer 1-100 (100 being fully fertile) - How fertile this tile is
         "character": String (seperated by space if more than one) - What character this tile is represented by
         "keyword":String (seperated by space if more than one) - A group for the material (used in world generation to place materials of a certain type)
         "color": String (hex with #) - Color for the character
+        "background-color": String (hex with #) - Background color for the character
+        "period": String - period the material should appear in
     },
     * = required
     Use American spelling where possible to reduce confusion.
@@ -48,7 +50,7 @@
 	{
 		"name": "sand",
 		"description": "Large particles of stone, that clump together to form a surface that absorbs water easily.",
-		"color": "",
+		"color": "#D5D768",
 		"passable": false,
 		"fertility": 70,
 		"character": ", . '",
@@ -57,7 +59,7 @@
 	{
 		"name": "dust",
 		"description": "Small, particulate pieces of materials.",
-		"color": "",
+		"color": "#BDBDBD",
 		"movecost": 10,
 		"passable": true,
 		"character": ".",
@@ -66,7 +68,7 @@
 	{
 		"name": "rust",
 		"description": "Small pieces of metals that have been exposed to oxygen.",
-		"color": "",
+		"color": "#DA8236",
 		"movecost": 15,
 		"passable": true,
 		"character": "*",
@@ -111,7 +113,7 @@
 	},
 	{
 		"name": "weed",
-		"description": "A unfavorable plant, commonly found in places where the vegestation has been disturbed. (No, this has nothing to do with 420.)",
+		"description": "A unfavorable plant, commonly found in places where the vegetation has been disturbed. (No, this has nothing to do with 420.)",
 		"color": "#00732D",
 		"movecost": 10,
 		"passable": true,
@@ -122,16 +124,17 @@
 	{
 		"name": "pine wood",
 		"description": "Plant matter that is tough and suitable for construction.",
-		"color": "", 
+		"color": "#C4BBB2", 
 		"passable": false,
 		"fertility": 5,
 		"character": "=",
+		"keyword": "shrub",
 	},
 	// To decide whether to go on the scale of Dwarf Fortress for stone.
 	{
 		"name": "stone",
 		"description": "Solid combination of minerals which are closely packed.",
-		"color": "",
+		"background-color": "#636363",
 		"passable": false,
 		"fertility": 5,
 		"character": "U+25A0",
@@ -140,7 +143,7 @@
 	{
 		"name": "granite",
 		"description": "A grainy type of stone, mainly composing of a mixture of quartz and other minerals.",
-		"color": "",
+		"background-color": "#FFA5A5",
 		"fertility": 5,
 		"passable": false,
 		"character": "U+25A0",
@@ -149,7 +152,7 @@
 	{
 		"name": "basalt",
 		"description": "A dark, volcanic rock, which is essentially solid lava mixed in with other minerals.",
-		"color": "",
+		"background-color": "#545454",
 		"fertility": 5,
 		"passable": false,
 		"character": "U+25A0",
@@ -157,8 +160,8 @@
 	},
 	{
 		"name": "diorite",
-		"description": "A rock that is composed largely of sillicon-based materials.",
-		"color": "",
+		"description": "A rock that is composed largely of silicon-based materials.",
+		"background-color": "#EBEBEB",
 		"fertility": 5,
 		"passable": false,
 		"character": "U+25A0",
@@ -167,7 +170,8 @@
 	{
 		"name": "steel plating",
 		"description": "A chunk of steel, made into plating for use as a structual material.",
-		"color": "",
+		"color": "#AEB1B3",
+		"background-color":"#D8D9DA",
 		"movecost": 100,
 		"passable": false,
 		"character": "U+2551",
@@ -177,7 +181,7 @@
 	{
 		"name": "crystal plant",
 		"description": "A glowing plant that has been mutated to produce rock instead of biological material.",
-		"color": "",
+		"color": "#423DFF",
 		"movecost": 25,
 		"passable": true,
 		"character": "U+263C",
@@ -186,16 +190,17 @@
 	},
 	{
 		"name": "twig matter",
-		"description": "",
-		"color": "",
+		"description": "A large bunch of twigs that have formed a blockage.",
+		"color": "#694100",
 		"movecost": 25,
 		"passable": true,
 		"character": "%",
+		"keyword": "obstacle",
 	},
 	{
 		"name":"prehistoric plant",
-		"description": "A wierd, long extinct plant. Needles extrude from the stem, protecting it from curious animals.",
-		"color": "",
+		"description": "A weird, long extinct plant. Needles extrude from the stem, protecting it from curious animals.",
+		"color": "#21C914",
 		"movecost": 40,
 		"passable": true,
 		"character": "U+263C",
