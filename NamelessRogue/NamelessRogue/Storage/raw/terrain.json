@@ -128,7 +128,16 @@
 		"passable": false,
 		"fertility": 5,
 		"character": "=",
-		"keyword": "shrub",
+		"keyword": "wood",
+	},
+	{
+		"name": "oak wood",
+		"description": "Wood from a oak tree.",
+		"color": "",
+		"passable": false,
+		"fertility": 5,
+		"character": "=",
+		"keyword": "wood",
 	},
 	// To decide whether to go on the scale of Dwarf Fortress for stone.
 	{
@@ -228,11 +237,11 @@
 	},
 	{
 		"name": "fire",
-		"description": "Also known as rapid oxidation of materials, fire is highly destructive.",
-		"color": "",
+		"description": "A rapidly destructive fire. Caused by rapid oxidisation.",
+		"color": "#FF5600",
 		"movecost": 20,
-		"passable": true, //but why would you want to jump into the fire
-		"character": "",
+		"passable": true, //but why
+		"character": "U+203C",
 		"keyword": "natural",
 	},
 	{
@@ -283,18 +292,18 @@
 	{
 		"name": "plastic block",
 		"description": "A block of plastic, used in environments where other materials are not suitable.",
-		"color": "",
+		"color": "C4C4C4",
 		"passable": false,
-		"character": "",
+		"character": "U+2551",
 		"period": "future present",
 		"keyword": "tiles",
 	},
 	{
 		"name": "glass wall",
 		"description": "A block of glass, suitable for windows or places where a transparent medium is required.",
-		"color": "",
+		"color": "#C4C4C4",
 		"passable": false,
-		"character": "",
+		"character": "U+2551",
 		"period": "future present",
 		"keyword": "tiles",
 	},
@@ -334,7 +343,7 @@
 		"color": "#8EFF89",
 		"movecost": 80,
 		"passable": true,
-		"character": "",
+		"character": "U+2248",
 		"keyword": "liquid",
 	},
 	{
@@ -343,7 +352,37 @@
 		"color": "#5E3A00",
 		"movecost": 35,
 		"passable": true,
-		"character": "",
+		"character": "U+2248",
 		"keyword": "liquid",
 	},
+	{
+		"name": "steam",
+		"description": "Water in a gaseous state.",
+		"color": "#BFBFBF",
+		"movecost": 0,
+		"passable": true,
+		"character": "U+263C",
+		"keyword": "gas", 
+	},
+	{
+		"name": "oxygen",
+		"description": "A gas, common in the universe. Highly flammable.",
+		"passable": true,
+		"movecost": 0,
+		"keyword": "gas",
+	},
+	{
+		"name": "hydrogen",
+		"description": "A flammable gas that can be used to create a steady flame.",
+		"passable": true,
+		"movecost": 0,
+		"keyword": "gas",
+	},
+	{
+		"name": "fallen asteroid",
+		"description": "A asteroid that has fallen from the sky. It emits a faint glow.",
+		"color": "#3A2500",
+		"passable": false,
+		"character": "U+0396",
+	}
 ]
