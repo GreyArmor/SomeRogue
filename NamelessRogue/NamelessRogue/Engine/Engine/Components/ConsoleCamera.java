@@ -1,18 +1,14 @@
-package view;
+package Engine.Components;
 
 import com.jogamp.nativewindow.util.Point;
 
-import Engine.GameScene;
-
-public class ConsoleCamera {
+public class ConsoleCamera  {
 	private Point position;
-	private GameScene scene;
 
 	//position is a bottom left corner of camera
-	public ConsoleCamera(GameScene scene, Point position)
+	public ConsoleCamera(Point position)
 	{
 		this.setPosition(position);
-		this.scene = scene;
 	}
 	
 	
@@ -50,7 +46,4 @@ public class ConsoleCamera {
 	{
 		setPosition(new Point(x,y));
 	}
-	
-	
-
 }

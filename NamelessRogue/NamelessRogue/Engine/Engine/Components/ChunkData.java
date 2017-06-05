@@ -1,13 +1,19 @@
-package Engine;
+package Engine.Components;
 
 import java.util.HashMap;
 import java.util.Iterator;
 
 import com.jogamp.nativewindow.util.Point;
 
-public class World {
+import Engine.Chunk;
+import Engine.Constants;
+import Engine.TerrainTypes;
+import Engine.Tile;
+import abstraction.IWorldProvider;
+
+public class ChunkData implements IWorldProvider {
 	HashMap<Point,Chunk> chunks;
-	public World()
+	public ChunkData()
 	{
 		chunks = new HashMap<Point,Chunk>();
 		initTestWorld();

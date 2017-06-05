@@ -1,8 +1,8 @@
 package Engine;
 
 import com.jogamp.nativewindow.util.Point;
-
-public class Chunk {
+import abstraction.IBoundsProvider;
+public class Chunk implements IBoundsProvider {
 	private Point worldPositionBottomLeftCorner;
 
 	private Tile[][] chunkTiles;
@@ -81,11 +81,11 @@ public class Chunk {
 		
 	}
 
-	BoundingBox getBoundingBox() {
+	public BoundingBox getBoundingBox() {
 		return boundingBox;
 	}
 
-	void setBoundingBox(BoundingBox boundingBox) {
+	public void setBoundingBox(BoundingBox boundingBox) {
 		this.boundingBox = boundingBox;
 	}
 }
