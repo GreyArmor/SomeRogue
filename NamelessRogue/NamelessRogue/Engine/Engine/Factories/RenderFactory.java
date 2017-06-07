@@ -4,7 +4,7 @@ import com.jogamp.nativewindow.util.Point;
 
 import Engine.Entity;
 import Engine.Components.ConsoleCamera;
-import Engine.Components.Screen;
+import Engine.Components.Rendering.Screen;
 import data.GameSettings;
 
 public class RenderFactory {

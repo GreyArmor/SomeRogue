@@ -12,10 +12,12 @@ import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.awt.TextRenderer;
 
+import Engine.Factories.CharacterFactory;
 import Engine.Factories.InputHandlingFactory;
 import Engine.Factories.RenderFactory;
 import Engine.Factories.TerrainFactory;
 import Engine.Systems.InputSystem;
+import Engine.Systems.MovementSystem;
 import Engine.Systems.RenderingSystem;
 import abstraction.IEntity;
 import abstraction.ISystem;
@@ -105,9 +107,12 @@ import javax.swing.JFrame;
     	  Entities.add(RenderFactory.CreateViewport(settings));
     	  Entities.add(TerrainFactory.CreateWorld());
     	  Entities.add(InputHandlingFactory.CreateInput());
+    	  Entities.add(CharacterFactory.CreateSimplePlayerCharacter());
+    	  Entities.add(CharacterFactory.CreateBlankNpc());
     	  
     	  
     	  Systems.add(inputsystem);
+    	  Systems.add(new MovementSystem());
     	  Systems.add(new RenderingSystem(settings)); 	  
     	  
     	

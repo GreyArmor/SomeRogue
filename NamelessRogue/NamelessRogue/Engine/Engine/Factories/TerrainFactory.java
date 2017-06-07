@@ -1,7 +1,7 @@
 package Engine.Factories;
 
 import Engine.Entity;
-import Engine.Components.ChunkData;
+import Engine.Components.World.ChunkData;
 
 public class TerrainFactory {
 	public static Entity CreateWorld()

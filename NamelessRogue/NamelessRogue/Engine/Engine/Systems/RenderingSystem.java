@@ -15,10 +15,12 @@ import com.jogamp.opengl.util.awt.TextRenderer;
 
 import Engine.TerrainTypes;
 import Engine.Tile;
-import Engine.Components.ChunkData;
 import Engine.Components.ConsoleCamera;
+import Engine.Components.Drawable;
 import Engine.Components.InputComponent;
-import Engine.Components.Screen;
+import Engine.Components.Position;
+import Engine.Components.Rendering.Screen;
+import Engine.Components.World.ChunkData;
 import Engine.Input.Intent;
 import abstraction.IEntity;
 import abstraction.ISystem;
@@ -61,6 +63,8 @@ public class RenderingSystem implements ISystem {
 			{
 				MoveCamera(game, camera);
 				fillcharacterBuffersWithWorld(screen,camera,game.getSettings(),worldProvider);
+				fillcharacterBuffersWithWorldObjects(screen,camera,game.getSettings(), game);
+				
 				renderScreen(game,screen,game.getSettings());
 				break;
 			}
@@ -127,6 +131,26 @@ public class RenderingSystem implements ISystem {
 			   }
 			   
 		   }
+		}
+	}
+	
+	void fillcharacterBuffersWithWorldObjects(Screen screen, ConsoleCamera camera, GameSettings settings, Game game){
+		for (IEntity entity : game.GetEntities()) {
+			
+			   Position position = entity.GetComponentOfType(Position.class);
+			   Drawable drawable = entity.GetComponentOfType(Drawable.class);
+			   if(drawable!=null && position!=null)
+			   {
+				   
+				   Point screenPoint = camera.PointToScreen(position.p.getX(),position.p.getY());
+				   int x = screenPoint.getX();
+				   int y = screenPoint.getY();
+				   if(x>=0 && x<settings.getWidth() && y>=0 && y < settings.getHeight())
+				   {
+					   screen.characterBuffer[screenPoint.getX()][screenPoint.getY()]=drawable.Representation;
+					   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]=drawable.CharColor;					 
+				   }
+			   }
 		}
 	}
 	

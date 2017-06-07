@@ -1,4 +1,4 @@
-package Engine.Components;
+package Engine.Components.Rendering;
 
 
 import java.awt.Color;

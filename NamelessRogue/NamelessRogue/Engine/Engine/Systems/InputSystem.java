@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import Engine.Components.ChunkData;
+import Engine.Entity;
 import Engine.Components.InputComponent;
+import Engine.Components.Player;
 import Engine.Input.KeyIntentTraslator;
 import abstraction.IEntity;
 import abstraction.ISystem;
@@ -23,17 +24,17 @@ public class InputSystem implements ISystem {
 	}
 	@Override
 	public void Update(Time gameTime, Game game) {
-		IEntity input = game.GetEntityByComponentClass(InputComponent.class);
-		InputComponent inputComponent = null;
-		if(input!=null)
-		{
-			inputComponent = input.GetComponentOfType(InputComponent.class);
-			inputComponent.Intents.clear();
-			for (KeyEvent keyEvent : pressedKeys) {
-				inputComponent.Intents.addAll(KeyIntentTraslator.Translate(keyEvent.getKeyCode()));
+		for (IEntity entity : game.GetEntities()) {
+			InputComponent inputComponent = entity.GetComponentOfType(InputComponent.class);
+			Player player = entity.GetComponentOfType(Player.class);
+			if(player!=null && inputComponent!=null){
+				inputComponent.Intents.clear();
+				for (KeyEvent keyEvent : pressedKeys) {
+					inputComponent.Intents.addAll(KeyIntentTraslator.Translate(keyEvent.getKeyCode()));
+				}
 			}
-		}			
-	}
+		}	
+	}		
 
 	public void keyPressed(KeyEvent e) {
 		pressedKeys = new ArrayList<>();

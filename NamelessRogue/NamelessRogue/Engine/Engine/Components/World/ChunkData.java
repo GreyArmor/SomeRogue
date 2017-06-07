@@ -1,4 +1,4 @@
-package Engine.Components;
+package Engine.Components.World;
 
 import java.util.HashMap;
 import java.util.Iterator;
