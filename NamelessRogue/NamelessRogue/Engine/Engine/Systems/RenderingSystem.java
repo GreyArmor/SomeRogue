@@ -31,10 +31,10 @@ import shell.Game;
 
 public class RenderingSystem implements ISystem {
 
-	
-	Font font = null;
-	TextRenderer textRenderer;
-	
+
+	private Font font = null;
+	private TextRenderer textRenderer;
+
 	public RenderingSystem(GameSettings settings)
 	{
 		try {
@@ -86,7 +86,7 @@ public class RenderingSystem implements ISystem {
 	
 	
 	
-	void fillcharacterBuffersWithWorld(Screen screen, ConsoleCamera camera, GameSettings settings, IWorldProvider world){
+	private void fillcharacterBuffersWithWorld(Screen screen, ConsoleCamera camera, GameSettings settings, IWorldProvider world){
 		int camX = camera.getPosition().getX();
 		int camY = camera.getPosition().getY();
 		for(int x = camX; x<settings.getWidth()+camX; x++){
@@ -118,7 +118,7 @@ public class RenderingSystem implements ISystem {
 		}
 	}
 	
-	void fillcharacterBuffersWithWorldObjects(Screen screen, ConsoleCamera camera, GameSettings settings, Game game){
+	 private void fillcharacterBuffersWithWorldObjects(Screen screen, ConsoleCamera camera, GameSettings settings, Game game){
 		for (IEntity entity : game.GetEntities()) {
 			
 			   Position position = entity.GetComponentOfType(Position.class);
@@ -139,7 +139,7 @@ public class RenderingSystem implements ISystem {
 	}
 	
 	
-	void renderScreen(Game gameInstance, Screen screen, GameSettings settings)
+	private void renderScreen(Game gameInstance, Screen screen, GameSettings settings)
 	{
 		//TODO: move drawing from this text renderer to tile rendering;
 	   textRenderer.beginRendering(gameInstance.getActualWidth(), gameInstance.getActualHeight());
