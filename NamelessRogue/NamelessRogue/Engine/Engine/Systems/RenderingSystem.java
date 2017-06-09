@@ -18,6 +18,7 @@ import Engine.Tile;
 import Engine.Components.ConsoleCamera;
 import Engine.Components.Drawable;
 import Engine.Components.InputComponent;
+import Engine.Components.Player;
 import Engine.Components.Position;
 import Engine.Components.Rendering.Screen;
 import Engine.Components.World.ChunkData;
@@ -75,28 +76,11 @@ public class RenderingSystem implements ISystem {
 		IEntity input = game.GetEntityByComponentClass(InputComponent.class);
 		if(input!=null)
 		{
+			Position playerPosition = game.GetEntityByComponentClass(Player.class).GetComponentOfType(Position.class);
+			
 			Point p = camera.getPosition();
-			InputComponent inputComponent = input.GetComponentOfType(InputComponent.class);
-			for (Intent intent : inputComponent.Intents) {
-				 switch( intent ) { 
-			        case MoveUp:
-			        	p.setY(p.getY()+1);
-			        	camera.setPosition(p);
-			            break;
-			        case MoveDowm:
-			        	p.setY(p.getY()-1);
-			        	camera.setPosition(p);
-			            break;
-			        case MoveLeft:
-			        	p.setX(p.getX()-1);
-			        	camera.setPosition(p);
-			            break;
-			        case MoveRight:
-			        	p.setX(p.getX()+1);
-			        	camera.setPosition(p);
-			            break;
-			     }		
-			}
+			p.setX(playerPosition.p.getX() - game.getSettings().getWidth()/2);
+			p.setY(playerPosition.p.getY() - game.getSettings().getHeight()/2);
 		}
 	}
 	
