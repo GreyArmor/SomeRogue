@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="Resources">
+    <output-path>$PROJECT_DIR$</output-path>
+    <properties id="ant-preprocessing">
+      <options enabled="true" />
+    </properties>
+    <root id="root">
+      <element id="directory" name="Resources">
+        <element id="dir-copy" path="$PROJECT_DIR$/NamelessRogue/NamelessRogue/Resources" />
+      </element>
+    </root>
+  </artifact>
+</component>

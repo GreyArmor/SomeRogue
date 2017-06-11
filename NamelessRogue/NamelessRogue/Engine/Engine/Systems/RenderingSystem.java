@@ -50,15 +50,71 @@ public class RenderingSystem implements ISystem {
 
         InitializeCharacterTileMap();
 	}
-
+	//TODO move this hardcode to configuration file for tileset
 	void InitializeCharacterTileMap()
 	{
 		characterToTileMap = new HashMap<>();
         characterToTileMap.put(' ',new AtlasTileData(0,15));
 		characterToTileMap.put('.',new AtlasTileData(14,13));
-        characterToTileMap.put('@',new AtlasTileData(1,15));
-        characterToTileMap.put('&',new AtlasTileData(6,13));
-        characterToTileMap.put('~',new AtlasTileData(1,14));
+        characterToTileMap.put('@',new AtlasTileData(0,11));
+		characterToTileMap.put('&',new AtlasTileData(6,13));
+        characterToTileMap.put('~',new AtlasTileData(14,8));
+        //alphabet
+		characterToTileMap.put('A',new AtlasTileData(1,11));
+		characterToTileMap.put('B',new AtlasTileData(2,11));
+		characterToTileMap.put('C',new AtlasTileData(3,11));
+		characterToTileMap.put('D',new AtlasTileData(4,11));
+		characterToTileMap.put('E',new AtlasTileData(5,11));
+		characterToTileMap.put('F',new AtlasTileData(6,11));
+		characterToTileMap.put('G',new AtlasTileData(7,11));
+		characterToTileMap.put('H',new AtlasTileData(8,11));
+		characterToTileMap.put('I',new AtlasTileData(9,11));
+		characterToTileMap.put('J',new AtlasTileData(10,11));
+		characterToTileMap.put('K',new AtlasTileData(11,11));
+		characterToTileMap.put('L',new AtlasTileData(12,11));
+		characterToTileMap.put('M',new AtlasTileData(13,11));
+		characterToTileMap.put('N',new AtlasTileData(14,11));
+		characterToTileMap.put('O',new AtlasTileData(15,11));
+		//row change
+		characterToTileMap.put('P',new AtlasTileData(1,12));
+		characterToTileMap.put('Q',new AtlasTileData(2,12));
+		characterToTileMap.put('R',new AtlasTileData(3,12));
+		characterToTileMap.put('S',new AtlasTileData(4,12));
+		characterToTileMap.put('T',new AtlasTileData(5,12));
+		characterToTileMap.put('U',new AtlasTileData(6,12));
+		characterToTileMap.put('V',new AtlasTileData(7,12));
+		characterToTileMap.put('W',new AtlasTileData(8,12));
+		characterToTileMap.put('X',new AtlasTileData(9,12));
+		characterToTileMap.put('Y',new AtlasTileData(10,12));
+		characterToTileMap.put('Z',new AtlasTileData(11,12));
+		//row change
+		characterToTileMap.put('a',new AtlasTileData(1,13));
+		characterToTileMap.put('b',new AtlasTileData(2,13));
+		characterToTileMap.put('c',new AtlasTileData(3,13));
+		characterToTileMap.put('d',new AtlasTileData(4,13));
+		characterToTileMap.put('e',new AtlasTileData(5,13));
+		characterToTileMap.put('f',new AtlasTileData(6,13));
+		characterToTileMap.put('g',new AtlasTileData(7,13));
+		characterToTileMap.put('h',new AtlasTileData(8,13));
+		characterToTileMap.put('i',new AtlasTileData(9,13));
+		characterToTileMap.put('j',new AtlasTileData(10,13));
+		characterToTileMap.put('k',new AtlasTileData(11,13));
+		characterToTileMap.put('l',new AtlasTileData(12,13));
+		characterToTileMap.put('m',new AtlasTileData(13,13));
+		characterToTileMap.put('n',new AtlasTileData(14,13));
+		characterToTileMap.put('o',new AtlasTileData(15,13));
+		//row change
+		characterToTileMap.put('p',new AtlasTileData(1,14));
+		characterToTileMap.put('q',new AtlasTileData(2,14));
+		characterToTileMap.put('r',new AtlasTileData(3,14));
+		characterToTileMap.put('s',new AtlasTileData(4,14));
+		characterToTileMap.put('t',new AtlasTileData(5,14));
+		characterToTileMap.put('u',new AtlasTileData(6,14));
+		characterToTileMap.put('v',new AtlasTileData(7,14));
+		characterToTileMap.put('w',new AtlasTileData(8,14));
+		characterToTileMap.put('x',new AtlasTileData(9,14));
+		characterToTileMap.put('y',new AtlasTileData(10,14));
+		characterToTileMap.put('z',new AtlasTileData(11,14));
 	}
 	
 	@Override
@@ -115,21 +171,25 @@ public class RenderingSystem implements ISystem {
 			   {		      
 				   screen.characterBuffer[screenPoint.getX()][screenPoint.getY()]='~';
 				   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]= new Color(0, 0, 255);
+				   screen.characterBackgroundColorBuffer[screenPoint.getX()][screenPoint.getY()]=new Color(0, 255, 255);
 			   }
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Road)
 			   {
 				   screen.characterBuffer[screenPoint.getX()][screenPoint.getY()]='.';
 				   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.GRAY;
+				   screen.characterBackgroundColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.BLACK;
 			   }
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Dirt)
 			   {
 				   screen.characterBuffer[screenPoint.getX()][screenPoint.getY()]='&';
 				   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.yellow;
+				   screen.characterBackgroundColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.BLACK;
 			   }
 			   else
 			   {
 				   screen.characterBuffer[screenPoint.getX()][screenPoint.getY()]=' ';
 				   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.black;
+				   screen.characterBackgroundColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.BLACK;
 			   }
 			   
 		   }
@@ -164,6 +224,12 @@ public class RenderingSystem implements ISystem {
 
 		for(int x = 0; x<settings.getWidth(); x++){
 			for(int y = 0; y<settings.getHeight(); y++) {
+				disableTexture(gl);
+				DrawTileBackGround(gl, gameInstance,
+						x * settings.getFontSize(),
+						y * settings.getFontSize(),
+						screen.characterBackgroundColorBuffer[x][y]);
+				enableTexture(gl);
 				DrawTile(gl, gameInstance,
 						x * settings.getFontSize(),
 						y * settings.getFontSize(),
@@ -216,10 +282,37 @@ public class RenderingSystem implements ISystem {
 		gl.glDisable(GL2.GL_LIGHTING);
 		gl.glEnable(GL2.GL_BLEND);
 		gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
-		tileAtlas.enable(gl);
 		tileAtlas.bind(gl);
 	}
 
+
+	void DrawTileBackGround(GL2 gl, Game game , int positionX, int positionY, Color color) {
+
+		gl.glColor3f(color.getRed(), color.getGreen(),color.getBlue());
+
+		int tileHeight = game.getSettings().getFontSize();
+		int tileWidth = game.getSettings().getFontSize();
+
+		// Draw a quad
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glVertex3f(positionX, positionY, 0);
+		gl.glVertex3f(positionX, positionY + tileHeight, 0);
+		gl.glVertex3f(positionX + tileWidth, positionY + tileHeight, 0);
+		gl.glVertex3f(positionX + tileWidth, positionY, 0);
+		gl.glEnd();
+	}
+
+	public void enableTexture(GL2 gl)
+	{
+		tileAtlas.enable(gl);
+	}
+
+	public void disableTexture(GL2 gl)
+	{
+		tileAtlas.disable(gl);
+	}
+
+	// dont forget to enable and bind texture before drawing the tiles
 	void DrawTile(GL2 gl, Game game ,int positionX, int positionY, AtlasTileData atlasTileData, Color color) {
 
 		if(atlasTileData==null) {

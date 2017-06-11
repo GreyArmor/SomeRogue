@@ -2,6 +2,10 @@ package Engine.Systems;
 
 import java.sql.Time;
 
+import Engine.Components.World.ChunkData;
+import Engine.TerrainTypes;
+import Engine.Tile;
+import abstraction.IWorldProvider;
 import com.jogamp.nativewindow.util.Point;
 
 import Engine.Components.ConsoleCamera;
@@ -20,24 +24,45 @@ public class MovementSystem implements ISystem {
 		for (IEntity entity : game.GetEntities()) {
 			Position position = entity.GetComponentOfType(Position.class);
 			InputComponent inputComponent = entity.GetComponentOfType(InputComponent.class);
+
 			if(position != null && inputComponent!=null)
 			{
+				Position newPosition = new Position(position.p.getX(),position.p.getY());
 				for (Intent intent : inputComponent.Intents) {
 					 switch(intent) { 
 				        case MoveUp:
-				        	position.p.setY(position.p.getY()+1);
+							newPosition.p.setY(position.p.getY()+1);
 				            break;
 				        case MoveDowm:
-				        	position.p.setY(position.p.getY()-1);
+							newPosition.p.setY(position.p.getY()-1);
 				            break;
 				        case MoveLeft:
-				        	position.p.setX(position.p.getX()-1);
+							newPosition.p.setX(position.p.getX()-1);
 				            break;
 				        case MoveRight:
-				        	position.p.setX(position.p.getX()+1);
+							newPosition.p.setX(position.p.getX()+1);
 				            break;
 				     }		
 				}
+				IEntity worldEntity = game.GetEntityByComponentClass(ChunkData.class);
+				IWorldProvider worldProvider = null;
+				if(worldEntity!=null)
+				{
+					worldProvider = worldEntity.GetComponentOfType(ChunkData.class);
+				}
+				Tile tile = worldProvider.getTile(newPosition.p.getX(),newPosition.p.getY());
+				TerrainTypes type = tile.getTerrainType();
+				if(type==TerrainTypes.Nothingness || type== TerrainTypes.Water)
+				{
+
+				}
+				else
+				{
+					position.p.setX(newPosition.p.getX());
+					position.p.setY(newPosition.p.getY());
+				}
+
+
 			}
 		}
 	}

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact name="Jar_Resources">
+    <output-path>C:/SomeRogue/NamelessRogue/NamelessRogue/bin/Resources</output-path>
+    <root id="root">
+      <element id="dir-copy" path="$PROJECT_DIR$/NamelessRogue/NamelessRogue/Resources" />
+    </root>
+  </artifact>
+</component>
