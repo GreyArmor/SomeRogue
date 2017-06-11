@@ -1,13 +1,7 @@
 package shell;
  import com.jogamp.newt.event.WindowEvent;
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL3;
-import com.jogamp.opengl.GL4;
-import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.GLCapabilities;
-import com.jogamp.opengl.GLEventListener;
-import com.jogamp.opengl.GLProfile;
-import com.jogamp.opengl.awt.GLCanvas;
+ import com.jogamp.opengl.*;
+ import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.awt.TextRenderer;
@@ -21,16 +15,24 @@ import Engine.Systems.MovementSystem;
 import Engine.Systems.RenderingSystem;
 import abstraction.IEntity;
 import abstraction.ISystem;
-import data.GameSettings;
+ import com.jogamp.opengl.util.texture.Texture;
+ import com.jogamp.opengl.util.texture.TextureIO;
+ import data.GameSettings;
 
 import com.jogamp.opengl.util.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+ import java.io.File;
+ import java.io.FileInputStream;
+ import java.io.IOException;
+ import java.net.URL;
+ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.stream.Collectors;
+ import java.util.logging.Level;
+ import java.util.logging.Logger;
+ import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
  
@@ -40,8 +42,14 @@ import javax.swing.JFrame;
       List <IEntity> Entities;   
       List <ISystem> Systems;  
       InputSystem inputsystem;
-      
-      public  List <IEntity> GetEntities()
+
+	  public GLCanvas getCanvas() {
+		  return canvas;
+	  }
+
+	  private final GLCanvas canvas;
+
+	  public  List <IEntity> GetEntities()
       {
     	  return Entities;
       }
@@ -74,11 +82,11 @@ import javax.swing.JFrame;
     	  super("Nameless rogue");
     	  GLProfile profile = GLProfile.getDefault();
     	  GLCapabilities capabilities = new GLCapabilities(profile);
-    	  
-    	  GLCanvas canvas = new GLCanvas(capabilities);
+
+		  canvas = new GLCanvas(capabilities);
     	  canvas.addGLEventListener(this);
     	  canvas.addKeyListener(this);
-    	 
+
     	  this.setName("Nameless rogue");
     	  this.getContentPane().add(canvas);
     	  //TODO: move to config later
@@ -113,7 +121,7 @@ import javax.swing.JFrame;
     	  
     	  Systems.add(inputsystem);
     	  Systems.add(new MovementSystem());
-    	  Systems.add(new RenderingSystem(settings)); 	  
+    	  Systems.add(new RenderingSystem(settings));
     	  
     	
     	  FPSAnimator animator = new FPSAnimator(60);
@@ -140,24 +148,20 @@ import javax.swing.JFrame;
       public void keyReleased(KeyEvent e) {
     	  inputsystem.keyReleased(e);
       }
-      
-      
+
+
       @Override
       public void display(GLAutoDrawable drawable) {
-    	  if(started)
-    	  {
-       	   GL gl = drawable.getGL().getGL();
-    	   gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-    	   for(ISystem system : this.Systems)
-    	   {
-    		   system.Update(null, this);
-    	   }
-    	  
-    	   gl.glFlush();
-    	  }
-      }
-      
-      
+		  if (started) {
+			  GL2 gl = drawable.getGL().getGL2();
+			  gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+			  for (ISystem system : this.Systems) {
+				  system.Update(null, this);
+			  }
+			  gl.glFlush();
+		  }
+	  }
+
       
       public void play() {
     	  started  = true;
@@ -180,7 +184,14 @@ import javax.swing.JFrame;
      @Override
      public void reshape(GLAutoDrawable drawable, int x, int y, int width,
              int height) {
+	/*	 GL2 gl = drawable.getGL().getGL2();
+		 gl.glMatrixMode(GL2.GL_PROJECTION);
+		 gl.glLoadIdentity();
+		 gl.glOrtho(0,1,0,1,-1,1);
+		 gl.glMatrixMode(GL2.GL_MODELVIEW);*/
      }
+
+
 
 
 

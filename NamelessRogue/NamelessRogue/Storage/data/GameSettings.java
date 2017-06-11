@@ -4,7 +4,7 @@ public class GameSettings {
 	//window resolution
 	private int widthChars;
 	private int heightChars;
-	private int fontSize = 12;
+	private int fontSize = 14;
 	//some font
 	private Font  font;
 	public GameSettings(int width,int height)

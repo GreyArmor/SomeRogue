@@ -1,16 +1,18 @@
 package Engine.Systems;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Time;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
+import Engine.Constants;
 import com.jogamp.nativewindow.util.Point;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLException;
+import com.jogamp.opengl.util.TileRenderer;
 import com.jogamp.opengl.util.awt.TextRenderer;
 
 import Engine.TerrainTypes;
@@ -22,19 +24,19 @@ import Engine.Components.Player;
 import Engine.Components.Position;
 import Engine.Components.Rendering.Screen;
 import Engine.Components.World.ChunkData;
-import Engine.Input.Intent;
 import abstraction.IEntity;
 import abstraction.ISystem;
 import abstraction.IWorldProvider;
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureIO;
 import data.GameSettings;
 import shell.Game;
 
 public class RenderingSystem implements ISystem {
 
-
+	Map<Character,AtlasTileData> characterToTileMap;
 	private Font font = null;
 	private TextRenderer textRenderer;
-
 	public RenderingSystem(GameSettings settings)
 	{
 		try {
@@ -43,13 +45,29 @@ public class RenderingSystem implements ISystem {
 			} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
-	   
+
 		textRenderer = new TextRenderer(font);
+
+        InitializeCharacterTileMap();
+	}
+
+	void InitializeCharacterTileMap()
+	{
+		characterToTileMap = new HashMap<>();
+        characterToTileMap.put(' ',new AtlasTileData(0,15));
+		characterToTileMap.put('.',new AtlasTileData(14,13));
+        characterToTileMap.put('@',new AtlasTileData(1,15));
+        characterToTileMap.put('&',new AtlasTileData(6,13));
+        characterToTileMap.put('~',new AtlasTileData(1,14));
 	}
 	
 	@Override
 	public void Update(Time gameTime, Game game) {
-		
+
+		//todo move to constructor or some other place better suited for initialization
+		if(tileAtlas==null) {
+			initializeTexture(game.getCanvas().getGL().getGL2());
+		}
 		IEntity worldEntity = game.GetEntityByComponentClass(ChunkData.class);
 		IWorldProvider worldProvider = null;
 		if(worldEntity!=null)
@@ -96,7 +114,7 @@ public class RenderingSystem implements ISystem {
 			   if(tileToDraw.getTerrainType()==TerrainTypes.Water)
 			   {		      
 				   screen.characterBuffer[screenPoint.getX()][screenPoint.getY()]='~';
-				   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]= new Color(0, 128, 128);	
+				   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]= new Color(0, 0, 255);
 			   }
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Road)
 			   {
@@ -106,7 +124,7 @@ public class RenderingSystem implements ISystem {
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Dirt)
 			   {
 				   screen.characterBuffer[screenPoint.getX()][screenPoint.getY()]='&';
-				   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.DARK_GRAY;
+				   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.yellow;
 			   }
 			   else
 			   {
@@ -141,24 +159,106 @@ public class RenderingSystem implements ISystem {
 	
 	private void renderScreen(Game gameInstance, Screen screen, GameSettings settings)
 	{
-		//TODO: move drawing from this text renderer to tile rendering;
-	   textRenderer.beginRendering(gameInstance.getActualWidth(), gameInstance.getActualHeight());
-	   textRenderer.setColor(Color.gray);
-	   textRenderer.setSmoothing(false);
+	   GL2  gl = gameInstance.getCanvas().getGL().getGL2();
+	   beginDrawingTiles(gl,gameInstance);
 
-	   Random rand = new Random();
-	   for(int x = 0; x<settings.getWidth(); x++){
-		   for(int y = 0; y<settings.getHeight(); y++){				
-				/*float r = rand.nextFloat();
-				float g = rand.nextFloat();
-				float b = rand.nextFloat();
-				Color randomColor = new Color(r, g, b);*/	
-				textRenderer.setColor(screen.characterColorBuffer[x][y]);	
-				textRenderer.draw(String.valueOf(screen.characterBuffer[x][y]), x*settings.getFontSize(), y*settings.getFontSize());			
-		   }
+		for(int x = 0; x<settings.getWidth(); x++){
+			for(int y = 0; y<settings.getHeight(); y++) {
+				DrawTile(gl, gameInstance,
+						x * settings.getFontSize(),
+						y * settings.getFontSize(),
+						characterToTileMap.get(screen.characterBuffer[x][y]),
+						screen.characterColorBuffer[x][y]);
+			}
 	   }
-	   textRenderer.endRendering();
-	}
-	
+	   endDrawingTile(gl);
 
+	}
+
+	class AtlasTileData{
+	 	public int X;
+	 	public int Y;
+	 	public AtlasTileData(int x,int y)
+        {
+            X = x;
+            Y = y;
+        }
+	}
+
+	Texture tileAtlas = null;
+	private Texture initializeTexture(GL2 gl) {
+
+		tileAtlas = null;
+
+		try {
+			tileAtlas = TextureIO.newTexture(new FileInputStream("Resources/DFfont.png"),false,".png");
+
+			tileAtlas.setTexParameteri(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_POINT);
+			tileAtlas.setTexParameteri(gl, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_POINT);
+			tileAtlas.setTexParameteri(gl, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
+			tileAtlas.setTexParameteri(gl, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);
+		} catch (IOException | GLException ex) {
+			//Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		return tileAtlas;
+	}
+
+	void beginDrawingTiles(GL2 gl, Game game)
+	{
+		gl.glMatrixMode(GL2.GL_PROJECTION);
+		gl.glPushMatrix();
+		gl.glLoadIdentity();
+		gl.glOrtho(0.0,game.getCanvas().getWidth(), 0.0,game.getCanvas().getHeight(), -1.0, 1.0);
+		gl.glMatrixMode(GL2.GL_MODELVIEW);
+		gl.glPushMatrix();
+		gl.glLoadIdentity();
+		gl.glDisable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_BLEND);
+		gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+		tileAtlas.enable(gl);
+		tileAtlas.bind(gl);
+	}
+
+	void DrawTile(GL2 gl, Game game ,int positionX, int positionY, AtlasTileData atlasTileData, Color color) {
+
+		if(atlasTileData==null) {
+			atlasTileData = new AtlasTileData(1, 1);
+		}
+
+		gl.glColor3f(color.getRed(), color.getGreen(),color.getBlue());
+
+		int tileHeight = game.getSettings().getFontSize();
+		int tileWidth = game.getSettings().getFontSize();
+
+		// Draw a textured quad
+		gl.glBegin(GL2.GL_QUADS);
+		float textureX = (float)atlasTileData.X*Constants.tileAtlasTileSize / tileAtlas.getImageWidth();
+		float textureY = (float)atlasTileData.Y * Constants.tileAtlasTileSize / tileAtlas.getImageHeight();
+
+		float textureXend = (((float)atlasTileData.X*Constants.tileAtlasTileSize) + Constants.tileAtlasTileSize) / tileAtlas.getImageWidth();
+		float textureYend = (((float)atlasTileData.Y*Constants.tileAtlasTileSize) + Constants.tileAtlasTileSize) / tileAtlas.getImageWidth();
+
+		gl.glTexCoord2f(textureX,textureY );
+		gl.glVertex3f(positionX, positionY, 0);
+        gl.glTexCoord2f(textureX, textureYend);
+		gl.glVertex3f(positionX, positionY + tileHeight, 0);
+        gl.glTexCoord2f(textureXend, textureYend);
+		gl.glVertex3f(positionX + tileWidth, positionY + tileHeight, 0);
+        gl.glTexCoord2f(textureXend, textureY);
+		gl.glVertex3f(positionX + tileWidth, positionY, 0);
+
+		gl.glEnd();
+	}
+	void endDrawingTile(GL2 gl)
+	{
+		gl.glDisable(GL2.GL_TEXTURE_2D);
+		gl.glPopMatrix();
+
+
+		gl.glMatrixMode(GL2.GL_PROJECTION);
+		gl.glPopMatrix();
+
+		gl.glMatrixMode(GL2.GL_MODELVIEW);
+	}
 }
