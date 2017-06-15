@@ -2,12 +2,8 @@ package Engine.Factories;
 
 import java.awt.Color;
 
+import Engine.Components.*;
 import Engine.Entity;
-import Engine.Components.Drawable;
-import Engine.Components.InputComponent;
-import Engine.Components.Movable;
-import Engine.Components.Player;
-import Engine.Components.Position;
 
 public class CharacterFactory {
 	public static Entity CreateSimplePlayerCharacter()
@@ -16,8 +12,10 @@ public class CharacterFactory {
 		playerCharacter.AddComponent(new Player());
 		playerCharacter.AddComponent(new InputComponent());
 		playerCharacter.AddComponent(new Movable());
-		playerCharacter.AddComponent(new Position());
+		playerCharacter.AddComponent(new Position(0,0));
 		playerCharacter.AddComponent(new Drawable('@',Color.LIGHT_GRAY));
+		playerCharacter.AddComponent(new Description("Player",""));
+		playerCharacter.AddComponent(new Health());
 		
 		return playerCharacter;
 	}
@@ -30,7 +28,7 @@ public class CharacterFactory {
 		playerCharacter.AddComponent(new Movable());
 		playerCharacter.AddComponent(new Position(10,10));
 		playerCharacter.AddComponent(new Drawable('D',Color.RED));
-		
+
 		return playerCharacter;
 	}
 	

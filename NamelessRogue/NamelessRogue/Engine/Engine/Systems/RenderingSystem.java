@@ -169,27 +169,27 @@ public class RenderingSystem implements ISystem {
 			   Point screenPoint = camera.PointToScreen(x,y);
 			   if(tileToDraw.getTerrainType()==TerrainTypes.Water)
 			   {		      
-				   screen.characterBuffer[screenPoint.getX()][screenPoint.getY()]='~';
-				   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]= new Color(0, 0, 255);
-				   screen.characterBackgroundColorBuffer[screenPoint.getX()][screenPoint.getY()]=new Color(0, 255, 255);
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='~';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor= new Color(0, 0, 255);
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color(0, 255, 255);
 			   }
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Road)
 			   {
-				   screen.characterBuffer[screenPoint.getX()][screenPoint.getY()]='.';
-				   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.GRAY;
-				   screen.characterBackgroundColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.BLACK;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='.';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.GRAY;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
 			   }
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Dirt)
 			   {
-				   screen.characterBuffer[screenPoint.getX()][screenPoint.getY()]='&';
-				   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.yellow;
-				   screen.characterBackgroundColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.BLACK;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='&';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.yellow;
+				    screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
 			   }
 			   else
 			   {
-				   screen.characterBuffer[screenPoint.getX()][screenPoint.getY()]=' ';
-				   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.black;
-				   screen.characterBackgroundColorBuffer[screenPoint.getX()][screenPoint.getY()]=Color.BLACK;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char=' ';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.black;
+				    screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
 			   }
 			   
 		   }
@@ -209,8 +209,8 @@ public class RenderingSystem implements ISystem {
 				   int y = screenPoint.getY();
 				   if(x>=0 && x<settings.getWidth() && y>=0 && y < settings.getHeight())
 				   {
-					   screen.characterBuffer[screenPoint.getX()][screenPoint.getY()]=drawable.Representation;
-					   screen.characterColorBuffer[screenPoint.getX()][screenPoint.getY()]=drawable.CharColor;					 
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char=drawable.Representation;
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=drawable.CharColor;					 
 				   }
 			   }
 		}
@@ -228,13 +228,13 @@ public class RenderingSystem implements ISystem {
 				DrawTileBackGround(gl, gameInstance,
 						x * settings.getFontSize(),
 						y * settings.getFontSize(),
-						screen.characterBackgroundColorBuffer[x][y]);
+						screen.ScreenBuffer[x][y].BackGroundColor);
 				enableTexture(gl);
 				DrawTile(gl, gameInstance,
 						x * settings.getFontSize(),
 						y * settings.getFontSize(),
-						characterToTileMap.get(screen.characterBuffer[x][y]),
-						screen.characterColorBuffer[x][y]);
+						characterToTileMap.get(screen.ScreenBuffer[x][y].Char),
+						screen.ScreenBuffer[x][y].CharColor);
 			}
 	   }
 	   endDrawingTile(gl);

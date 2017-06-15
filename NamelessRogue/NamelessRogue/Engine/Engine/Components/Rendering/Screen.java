@@ -8,12 +8,15 @@ import data.GameSettings;
 import shell.Game;
 
 public class Screen {
-		public char characterBuffer[][];
-	public Color characterColorBuffer[][];
-	public Color characterBackgroundColorBuffer[][];
-	public Screen(int width,int height) {	
-		characterBuffer = new char[width][height];
-		characterColorBuffer = new Color[width][height];
-		characterBackgroundColorBuffer = new Color[width][height];
+	public ScreenTile[][] ScreenBuffer;
+	public Screen(int width,int height) {
+		ScreenBuffer = new ScreenTile[width][height];
+		for (int i = 0; i <width;i++)
+		{
+			for (int j = 0;j<height;j++)
+			{
+				ScreenBuffer[i][j]= new ScreenTile();
+			}
+		}
 	}
 }
