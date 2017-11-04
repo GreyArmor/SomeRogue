@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleUiElement {
-
-    //List
-
     public SimpleUiElement(SimpleUiElement parent)
     {
         Parent = parent;

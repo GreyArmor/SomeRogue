@@ -32,6 +32,7 @@ public class MovementSystem implements ISystem {
 					 switch(intent) { 
 				        case MoveUp:
 							newPosition.p.setY(position.p.getY()+1);
+							game.WriteLineToConsole("Moved up");
 				            break;
 				        case MoveDowm:
 							newPosition.p.setY(position.p.getY()-1);
@@ -42,6 +43,22 @@ public class MovementSystem implements ISystem {
 				        case MoveRight:
 							newPosition.p.setX(position.p.getX()+1);
 				            break;
+						 case MoveTopLeft:
+							newPosition.p.setY(position.p.getY()+1);
+							newPosition.p.setX(position.p.getX()-1);
+						 	break;
+						 case MoveTopRight:
+							 newPosition.p.setY(position.p.getY()+1);
+							 newPosition.p.setX(position.p.getX()+1);
+							 break;
+						 case MoveBottomLeft:
+							 newPosition.p.setY(position.p.getY()-1);
+							 newPosition.p.setX(position.p.getX()-1);
+							 break;
+						 case MoveBottomRight:
+							 newPosition.p.setY(position.p.getY()-1);
+							 newPosition.p.setX(position.p.getX()+1);
+						 	break;
 				     }		
 				}
 				IEntity worldEntity = game.GetEntityByComponentClass(ChunkData.class);

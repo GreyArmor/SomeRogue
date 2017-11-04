@@ -119,7 +119,6 @@ public class RenderingSystem implements ISystem {
 	
 	@Override
 	public void Update(Time gameTime, Game game) {
-
 		//todo move to constructor or some other place better suited for initialization
 		if(tileAtlas==null) {
 			initializeTexture(game.getCanvas().getGL().getGL2());
