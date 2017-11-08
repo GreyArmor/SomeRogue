@@ -1,8 +1,10 @@
 package Engine.Systems;
 
 import java.sql.Time;
+import java.util.Random;
 
 import Engine.Components.World.ChunkData;
+import Engine.Components.World.TerrainGenerator;
 import Engine.TerrainTypes;
 import Engine.Tile;
 import abstraction.IWorldProvider;
@@ -31,6 +33,7 @@ public class MovementSystem implements ISystem {
 				for (Intent intent : inputComponent.Intents) {
 					 switch(intent) { 
 				        case MoveUp:
+							TerrainGenerator g = new TerrainGenerator(new Random().nextInt(1000));
 							newPosition.p.setY(position.p.getY()+1);
 							game.WriteLineToConsole("Moved up");
 				            break;
