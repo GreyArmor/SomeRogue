@@ -33,12 +33,11 @@ public class MovementSystem implements ISystem {
 				for (Intent intent : inputComponent.Intents) {
 					 switch(intent) { 
 				        case MoveUp:
-							TerrainGenerator g = new TerrainGenerator(new Random().nextInt(1000));
-							newPosition.p.setY(position.p.getY()+1);
+							newPosition.p.setY(position.p.getY()-1);
 							game.WriteLineToConsole("Moved up");
 				            break;
 				        case MoveDowm:
-							newPosition.p.setY(position.p.getY()-1);
+							newPosition.p.setY(position.p.getY()+1);
 				            break;
 				        case MoveLeft:
 							newPosition.p.setX(position.p.getX()-1);
@@ -47,19 +46,19 @@ public class MovementSystem implements ISystem {
 							newPosition.p.setX(position.p.getX()+1);
 				            break;
 						 case MoveTopLeft:
-							newPosition.p.setY(position.p.getY()+1);
+							newPosition.p.setY(position.p.getY()-1);
 							newPosition.p.setX(position.p.getX()-1);
 						 	break;
 						 case MoveTopRight:
-							 newPosition.p.setY(position.p.getY()+1);
+							 newPosition.p.setY(position.p.getY()-1);
 							 newPosition.p.setX(position.p.getX()+1);
 							 break;
 						 case MoveBottomLeft:
-							 newPosition.p.setY(position.p.getY()-1);
+							 newPosition.p.setY(position.p.getY()+1);
 							 newPosition.p.setX(position.p.getX()-1);
 							 break;
 						 case MoveBottomRight:
-							 newPosition.p.setY(position.p.getY()-1);
+							 newPosition.p.setY(position.p.getY()+1);
 							 newPosition.p.setX(position.p.getX()+1);
 						 	break;
 				     }		
@@ -72,15 +71,15 @@ public class MovementSystem implements ISystem {
 				}
 				Tile tile = worldProvider.getTile(newPosition.p.getX(),newPosition.p.getY());
 				TerrainTypes type = tile.getTerrainType();
-				if(type==TerrainTypes.Nothingness || type== TerrainTypes.Water)
-				{
-
-				}
-				else
-				{
+//				if(type==TerrainTypes.Nothingness )//|| type== TerrainTypes.Water)
+//				{
+//
+//				}
+//				else
+//				{
 					position.p.setX(newPosition.p.getX());
 					position.p.setY(newPosition.p.getY());
-				}
+//				}
 
 
 			}

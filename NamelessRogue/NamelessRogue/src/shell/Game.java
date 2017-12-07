@@ -1,4 +1,5 @@
 package shell;
+ import Engine.Systems.ChunkManagementSystem;
  import com.jogamp.opengl.*;
  import com.jogamp.opengl.awt.GLCanvas;
  import com.jogamp.opengl.util.FPSAnimator;
@@ -149,7 +150,9 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
     	  Entities.add(CharacterFactory.CreateBlankNpc());
 
     	  Systems.add(inputsystem);
+
     	  Systems.add(new MovementSystem());
+    	  Systems.add(new ChunkManagementSystem());
     	  Systems.add(new RenderingSystem(settings));
 
           paneScrollPane.revalidate();

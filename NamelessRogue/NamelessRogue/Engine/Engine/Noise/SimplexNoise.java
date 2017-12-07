@@ -7,7 +7,7 @@ public class SimplexNoise {
     double[] frequencys;
     double[] amplitudes;
 
-    int largestFeature;
+    private int largestFeature;
     double persistence;
     int seed;
 
@@ -39,7 +39,7 @@ public class SimplexNoise {
     }
 
 
-    public double getNoise(int x, int y){
+    public double getNoise(double x, double y){
 
         double result=0;
 
@@ -55,7 +55,7 @@ public class SimplexNoise {
 
     }
 
-    public double getNoise(int x,int y, int z){
+    public double getNoise(double x,double y, double z){
 
         double result=0;
 
@@ -70,4 +70,8 @@ public class SimplexNoise {
         return result;
 
     }
-} 
+
+    public int getLargestFeature() {
+        return largestFeature;
+    }
+}

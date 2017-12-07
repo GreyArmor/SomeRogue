@@ -1,21 +1,42 @@
 package Engine.Components.World;
 
+import Engine.Constants;
 import Engine.Noise.ImageWriter;
 import Engine.Noise.SimplexNoise;
+import Engine.Tile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
  * Created by Admin on 04.11.2017.
  */
 public class TerrainGenerator {
-    SimplexNoise noise;
+
+
+    public List<SimplexNoise> TerrainNoises;
+    public int Seed;
+    private int forestSeed;
+    int resolution=1000;
+    int layer1 = 300, layer2 = 600, layer3 = 900;
+
     public TerrainGenerator(int seed)
     {
-        SimplexNoise noise1 = new SimplexNoise(300,0.5, seed);
-        SimplexNoise noise2 = new SimplexNoise(600,0.5, seed);
-        SimplexNoise noise3 = new SimplexNoise(900,0.5, seed);
-        Random r = new Random(seed);
+        Seed = seed;
+        Random forestsRandom = new Random(seed);
+        TerrainNoises =  new ArrayList<>();
+       // Constants.
+        //Const.
+
+        SimplexNoise noise1 = new SimplexNoise( layer1,0.5, Seed);
+        SimplexNoise noise2 = new SimplexNoise( layer2,0.5, Seed);
+        SimplexNoise noise3 = new SimplexNoise( layer3,0.5, Seed);
+
+
+        TerrainNoises.add(noise1);
+        TerrainNoises.add(noise2);
+        TerrainNoises.add(noise3);
 
 
 
@@ -24,36 +45,36 @@ public class TerrainGenerator {
         double yStart=0;
         double yEnd=1000;
 
-        int xResolution=1000;
-        int yResolution=1000;
+
+        int borderthickness = resolution/10;
 
 
 
+        double[][] result=new double[resolution][resolution];
 
-        double[][] result=new double[xResolution][yResolution];
+        for(int i=0;i<resolution;i++){
+            for(int j=0;j<resolution;j++) {
 
-        for(int i=0;i<xResolution;i++){
-            for(int j=0;j<yResolution;j++) {
-
-                int x = (int) (xStart + i * ((XEnd - xStart) / xResolution));
-                int y = (int) (yStart + j * ((yEnd - yStart) / yResolution));
-                double n1 = +noise1.getNoise(x, y);
-                double n2 = +noise2.getNoise(x, y);
-                double n3 = +noise3.getNoise(x, y);
-
-                result[i][j] = 1 - (0.5 * (1 + ((n1 + n2 + n3) / 3)));
+                int x = (int) (xStart + i * ((XEnd - xStart) / resolution));
+                int y = (int) (yStart + j * ((yEnd - yStart) / resolution));
+                double noise = 0;
+                for (SimplexNoise s :TerrainNoises) {
+                    noise += s.getNoise(x, y);
+                }
+                noise /= TerrainNoises.size();
+                result[i][j] = 1 - (0.5 * (1 + noise));
 
             }
         }
 
-        for(int i=0;i<xResolution;i++) {
-            for (int j = 0; j < yResolution; j++) {
-                if (i < 100 || j < 100 || i > 900 || j > 900) {
+        for(int i=0;i<resolution;i++) {
+            for (int j = 0; j < resolution; j++) {
+                if (i < borderthickness || j < borderthickness || i > resolution - borderthickness || j > resolution - borderthickness) {
 
-                    int iDist = i > 900 ? 1000 - i : i;
-                    int jDist = j > 900 ? 1000 - j : j;
+                    int iDist = i > resolution - borderthickness ? resolution - i : i;
+                    int jDist = j >  resolution - borderthickness ? resolution - j : j;
                     int edgePosition = iDist > jDist ? jDist : iDist;
-                    result[i][j] *= (float) edgePosition / 100;
+                    result[i][j] *= (float) edgePosition / (resolution/10);
                 }
                 if (result[i][j] <= 0.5) {
                     result[i][j] = 0;
@@ -61,7 +82,37 @@ public class TerrainGenerator {
             }
         }
 
-        ImageWriter.greyWriteImage(result);
+        //ImageWriter.greyWriteImage(result);
 
+    }
+
+    public Tile GetTile(int x, int y)
+    {
+        double dX = (double)x/Constants.ChunkSize;
+        double dY = (double)y/Constants.ChunkSize;
+        System.out.print("X ="+dX+"Y =" +dY +"\n");
+        int resolutionZoomed = resolution * Constants.ChunkSize;
+        int borderthickness = resolutionZoomed/10;
+
+        double noise = 0;
+        for (SimplexNoise s : TerrainNoises) {
+            noise += s.getNoise(dX, dY);
+        }
+
+        noise /= TerrainNoises.size();
+        double result = 1 - (0.5 * (1 + noise));
+
+        if (x < borderthickness || y < borderthickness || x > resolutionZoomed - borderthickness || y > resolutionZoomed - borderthickness) {
+
+            int iDist = x > resolutionZoomed - borderthickness ? resolutionZoomed - x : x;
+            int jDist = y >  resolutionZoomed - borderthickness ? resolutionZoomed - y : y;
+            int edgePosition = iDist > jDist ? jDist : iDist;
+            System.out.print(String.format("edgePosition = {0}\n", edgePosition));
+            result *= (float) edgePosition / (resolutionZoomed/10);
+        }
+        if (result <= 0.5) {
+            result = 0;
+        }
+        return TileNoiseInterpreter.GetTile(result);
     }
 }

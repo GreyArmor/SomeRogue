@@ -1,12 +1,17 @@
 package Engine;
 
+import Engine.Components.World.ChunkData;
+import Engine.Components.World.TerrainGenerator;
+import abstraction.IWorldProvider;
 import com.jogamp.nativewindow.util.Point;
 import abstraction.IBoundsProvider;
 public class Chunk implements IBoundsProvider {
 	private Point worldPositionBottomLeftCorner;
+	private ChunkData chunkContainer;
 
 	private Tile[][] chunkTiles;
 	private BoundingBox boundingBox;
+	private boolean isActive;
 	
 		
 	public Point getWorldPosition() {
@@ -16,12 +21,27 @@ public class Chunk implements IBoundsProvider {
 	public void setWorldPosition(Point worldPosition) {
 		this.worldPositionBottomLeftCorner = worldPosition;
 	}	
-	
-	public Chunk(Point bottomLeftCornerWorld)
+
+
+	public Chunk(Point bottomLeftCornerWorld, ChunkData chunkContainer)
 	{
 		boundingBox = new BoundingBox(bottomLeftCornerWorld, new Point(bottomLeftCornerWorld.getX()+Constants.ChunkSize,bottomLeftCornerWorld.getY()+Constants.ChunkSize));
 		worldPositionBottomLeftCorner = bottomLeftCornerWorld;
-		chunkTiles = new Tile[Constants.ChunkSize][Constants.ChunkSize];		
+		this.chunkContainer = chunkContainer;
+
+		isActive = false;
+	}
+
+
+	public void FillWithTiles(TerrainGenerator generator)
+	{
+		for(int x = 0; x<Constants.ChunkSize;x++)
+		{
+			for(int y = 0;y<Constants.ChunkSize;y++)
+			{
+				chunkTiles[x][y] = generator.GetTile(x+worldPositionBottomLeftCorner.getX(),y + worldPositionBottomLeftCorner.getY());
+			}
+		}
 	}
 	
 	public void fillWithTestTiles()
@@ -67,6 +87,12 @@ public class Chunk implements IBoundsProvider {
 	}
 	
 	public Tile getTile(int x,int y) {
+
+		if(!isActive)
+		{
+			Activate();
+		}
+
 		int bottomLeftX = worldPositionBottomLeftCorner.getX();
 		int bottomLeftY = worldPositionBottomLeftCorner.getY();
 		
@@ -76,9 +102,34 @@ public class Chunk implements IBoundsProvider {
 		return chunkTiles[localX][localY];
 	}
 
+	public void Activate() {
+		isActive = true;
+		chunkTiles = new Tile[Constants.ChunkSize][Constants.ChunkSize];
+		if(!LoadFromDisk())
+		{
+			FillWithTiles(chunkContainer.getWorldGenerator());
+		}
+
+	}
+//TODO: serialization
+	private boolean LoadFromDisk() {
+		return false;
+	}
+
+	public void Deactivate()
+	{
+		isActive = false;
+		chunkTiles = null;
+	}
+
 	public void setTile(int x, int y, Tile tile) {
-		// TODO Auto-generated method stub
-		
+		int bottomLeftX = worldPositionBottomLeftCorner.getX();
+		int bottomLeftY = worldPositionBottomLeftCorner.getY();
+
+		int localX = Math.abs(bottomLeftX - x);
+		int localY = Math.abs(bottomLeftY - y);
+
+		chunkTiles[localX][localY] = tile;
 	}
 
 	public BoundingBox getBoundingBox() {

@@ -6,4 +6,9 @@ public enum TerrainTypes {
 	Road,
 	Water,
 	Grass,
+	Snow,
+	Sand,
+	Rocks,
+	LightRocks, HardRocks,
+
 }

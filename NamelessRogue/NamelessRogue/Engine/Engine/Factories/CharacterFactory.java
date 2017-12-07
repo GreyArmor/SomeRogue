@@ -3,6 +3,7 @@ package Engine.Factories;
 import java.awt.Color;
 
 import Engine.Components.*;
+import Engine.Constants;
 import Engine.Entity;
 
 public class CharacterFactory {
@@ -12,7 +13,7 @@ public class CharacterFactory {
 		playerCharacter.AddComponent(new Player());
 		playerCharacter.AddComponent(new InputComponent());
 		playerCharacter.AddComponent(new Movable());
-		playerCharacter.AddComponent(new Position(0,0));
+		playerCharacter.AddComponent(new Position(109* Constants.ChunkSize,307*Constants.ChunkSize));
 		playerCharacter.AddComponent(new Drawable('@',Color.LIGHT_GRAY));
 		playerCharacter.AddComponent(new Description("Player",""));
 		playerCharacter.AddComponent(new Health());

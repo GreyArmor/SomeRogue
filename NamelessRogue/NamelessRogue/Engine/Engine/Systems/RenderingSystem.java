@@ -76,45 +76,45 @@ public class RenderingSystem implements ISystem {
 		characterToTileMap.put('N',new AtlasTileData(14,11));
 		characterToTileMap.put('O',new AtlasTileData(15,11));
 		//row change
-		characterToTileMap.put('P',new AtlasTileData(1,12));
-		characterToTileMap.put('Q',new AtlasTileData(2,12));
-		characterToTileMap.put('R',new AtlasTileData(3,12));
-		characterToTileMap.put('S',new AtlasTileData(4,12));
-		characterToTileMap.put('T',new AtlasTileData(5,12));
-		characterToTileMap.put('U',new AtlasTileData(6,12));
-		characterToTileMap.put('V',new AtlasTileData(7,12));
-		characterToTileMap.put('W',new AtlasTileData(8,12));
-		characterToTileMap.put('X',new AtlasTileData(9,12));
-		characterToTileMap.put('Y',new AtlasTileData(10,12));
-		characterToTileMap.put('Z',new AtlasTileData(11,12));
+		characterToTileMap.put('P',new AtlasTileData(0,10));
+		characterToTileMap.put('Q',new AtlasTileData(1,10));
+		characterToTileMap.put('R',new AtlasTileData(2,10));
+		characterToTileMap.put('S',new AtlasTileData(3,10));
+		characterToTileMap.put('T',new AtlasTileData(4,10));
+		characterToTileMap.put('U',new AtlasTileData(5,10));
+		characterToTileMap.put('V',new AtlasTileData(6,10));
+		characterToTileMap.put('W',new AtlasTileData(7,10));
+		characterToTileMap.put('X',new AtlasTileData(8,10));
+		characterToTileMap.put('Y',new AtlasTileData(9,10));
+		characterToTileMap.put('Z',new AtlasTileData(10,10));
 		//row change
-		characterToTileMap.put('a',new AtlasTileData(1,13));
-		characterToTileMap.put('b',new AtlasTileData(2,13));
-		characterToTileMap.put('c',new AtlasTileData(3,13));
-		characterToTileMap.put('d',new AtlasTileData(4,13));
-		characterToTileMap.put('e',new AtlasTileData(5,13));
-		characterToTileMap.put('f',new AtlasTileData(6,13));
-		characterToTileMap.put('g',new AtlasTileData(7,13));
-		characterToTileMap.put('h',new AtlasTileData(8,13));
-		characterToTileMap.put('i',new AtlasTileData(9,13));
-		characterToTileMap.put('j',new AtlasTileData(10,13));
-		characterToTileMap.put('k',new AtlasTileData(11,13));
-		characterToTileMap.put('l',new AtlasTileData(12,13));
-		characterToTileMap.put('m',new AtlasTileData(13,13));
-		characterToTileMap.put('n',new AtlasTileData(14,13));
-		characterToTileMap.put('o',new AtlasTileData(15,13));
+		characterToTileMap.put('a',new AtlasTileData(1,9));
+		characterToTileMap.put('b',new AtlasTileData(2,9));
+		characterToTileMap.put('c',new AtlasTileData(3,9));
+		characterToTileMap.put('d',new AtlasTileData(4,9));
+		characterToTileMap.put('e',new AtlasTileData(5,9));
+		characterToTileMap.put('f',new AtlasTileData(6,9));
+		characterToTileMap.put('g',new AtlasTileData(7,9));
+		characterToTileMap.put('h',new AtlasTileData(8,9));
+		characterToTileMap.put('i',new AtlasTileData(9,9));
+		characterToTileMap.put('j',new AtlasTileData(10,9));
+		characterToTileMap.put('k',new AtlasTileData(11,9));
+		characterToTileMap.put('l',new AtlasTileData(12,9));
+		characterToTileMap.put('m',new AtlasTileData(13,9));
+		characterToTileMap.put('n',new AtlasTileData(14,9));
+		characterToTileMap.put('o',new AtlasTileData(15,9));
 		//row change
-		characterToTileMap.put('p',new AtlasTileData(1,14));
-		characterToTileMap.put('q',new AtlasTileData(2,14));
-		characterToTileMap.put('r',new AtlasTileData(3,14));
-		characterToTileMap.put('s',new AtlasTileData(4,14));
-		characterToTileMap.put('t',new AtlasTileData(5,14));
-		characterToTileMap.put('u',new AtlasTileData(6,14));
-		characterToTileMap.put('v',new AtlasTileData(7,14));
-		characterToTileMap.put('w',new AtlasTileData(8,14));
-		characterToTileMap.put('x',new AtlasTileData(9,14));
-		characterToTileMap.put('y',new AtlasTileData(10,14));
-		characterToTileMap.put('z',new AtlasTileData(11,14));
+		characterToTileMap.put('p',new AtlasTileData(0,8));
+		characterToTileMap.put('q',new AtlasTileData(1,8));
+		characterToTileMap.put('r',new AtlasTileData(2,8));
+		characterToTileMap.put('s',new AtlasTileData(3,8));
+		characterToTileMap.put('t',new AtlasTileData(4,8));
+		characterToTileMap.put('u',new AtlasTileData(5,8));
+		characterToTileMap.put('v',new AtlasTileData(6,8));
+		characterToTileMap.put('w',new AtlasTileData(7,8));
+		characterToTileMap.put('x',new AtlasTileData(8,8));
+		characterToTileMap.put('y',new AtlasTileData(9,8));
+		characterToTileMap.put('z',new AtlasTileData(10,8));
 	}
 	
 	@Override
@@ -183,6 +183,46 @@ public class RenderingSystem implements ISystem {
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='&';
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.yellow;
 				    screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+			   }
+
+			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Grass)
+			   {
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='g';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.GREEN;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+			   }
+
+			   else  if(tileToDraw.getTerrainType()==TerrainTypes.HardRocks)
+			   {
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='r';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.darkGray;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+			   }
+
+			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Rocks)
+			   {
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='r';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.gray;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+			   }
+
+			   else  if(tileToDraw.getTerrainType()==TerrainTypes.LightRocks)
+			   {
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='r';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.lightGray;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+			   }
+			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Sand)
+			   {
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='~';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.yellow;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+			   }
+			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Snow)
+			   {
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='s';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.white;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
 			   }
 			   else
 			   {
@@ -274,7 +314,7 @@ public class RenderingSystem implements ISystem {
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
-		gl.glOrtho(0.0,game.getCanvas().getWidth(), 0.0,game.getCanvas().getHeight(), -1.0, 1.0);
+		gl.glOrtho(0.0,game.getCanvas().getWidth(), game.getCanvas().getHeight(),0.0, -1.0, 1.0);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
