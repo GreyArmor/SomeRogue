@@ -82,7 +82,7 @@ public class TerrainGenerator {
             }
         }
 
-        //ImageWriter.greyWriteImage(result);
+        ImageWriter.greyWriteImage(result);
 
     }
 
