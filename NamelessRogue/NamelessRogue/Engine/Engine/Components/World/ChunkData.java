@@ -23,7 +23,7 @@ public class ChunkData implements IWorldProvider {
 	{
 		chunks = new HashMap<Point,Chunk>();
 
-		terrainGenerator = new TerrainGenerator(2);
+		terrainGenerator = new TerrainGenerator(5);
 		realityBubbleChunks =  new HashMap<Point,Chunk> ();
 		initWorld();
 	}

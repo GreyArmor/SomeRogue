@@ -2,8 +2,6 @@ package Engine.Components.World;
 
 import Engine.TerrainTypes;
 import Engine.Tile;
-import jdk.nashorn.internal.runtime.Debug;
-import sun.rmi.runtime.Log;
 
 import java.awt.*;
 import java.io.Console;
