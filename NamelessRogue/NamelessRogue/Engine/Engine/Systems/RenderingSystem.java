@@ -371,14 +371,26 @@ public class RenderingSystem implements ISystem {
 		float textureXend = (((float)atlasTileData.X*Constants.tileAtlasTileSize) + Constants.tileAtlasTileSize) / tileAtlas.getImageWidth();
 		float textureYend = (((float)atlasTileData.Y*Constants.tileAtlasTileSize) + Constants.tileAtlasTileSize) / tileAtlas.getImageWidth();
 
-		gl.glTexCoord2f(textureX,textureY );
-		gl.glVertex3f(positionX, positionY, 0);
-        gl.glTexCoord2f(textureX, textureYend);
+		gl.glTexCoord2f(textureX,textureY);
 		gl.glVertex3f(positionX, positionY + tileHeight, 0);
-        gl.glTexCoord2f(textureXend, textureYend);
-		gl.glVertex3f(positionX + tileWidth, positionY + tileHeight, 0);
-        gl.glTexCoord2f(textureXend, textureY);
+
+		gl.glTexCoord2f(textureX, textureYend);
+		gl.glVertex3f(positionX, positionY, 0);
+
+		gl.glTexCoord2f(textureXend, textureYend);
 		gl.glVertex3f(positionX + tileWidth, positionY, 0);
+
+		gl.glTexCoord2f(textureXend, textureY);
+		gl.glVertex3f(positionX + tileWidth, positionY + tileHeight, 0);
+
+
+
+
+
+
+
+
+
 
 		gl.glEnd();
 	}
