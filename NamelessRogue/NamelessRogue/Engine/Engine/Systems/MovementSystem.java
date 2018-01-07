@@ -1,19 +1,14 @@
 package Engine.Systems;
 
 import java.sql.Time;
-import java.util.Random;
 
 import Engine.Components.World.ChunkData;
-import Engine.Components.World.TerrainGenerator;
 import Engine.TerrainTypes;
 import Engine.Tile;
 import abstraction.IWorldProvider;
-import com.jogamp.nativewindow.util.Point;
 
-import Engine.Components.ConsoleCamera;
-import Engine.Components.InputComponent;
-import Engine.Components.Position;
-import Engine.Components.Rendering.Screen;
+import Engine.Components.Interaction.InputComponent;
+import Engine.Components.Physical.Position;
 import Engine.Input.Intent;
 import abstraction.IEntity;
 import abstraction.ISystem;
@@ -36,7 +31,7 @@ public class MovementSystem implements ISystem {
 							newPosition.p.setY(position.p.getY()-1);
 							game.WriteLineToConsole("Moved up");
 				            break;
-				        case MoveDowm:
+				        case MoveDown:
 							newPosition.p.setY(position.p.getY()+1);
 				            break;
 				        case MoveLeft:

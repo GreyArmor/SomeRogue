@@ -6,22 +6,20 @@ import java.io.IOException;
 import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import Engine.Constants;
 import com.jogamp.nativewindow.util.Point;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLException;
-import com.jogamp.opengl.util.TileRenderer;
 import com.jogamp.opengl.util.awt.TextRenderer;
 
 import Engine.TerrainTypes;
 import Engine.Tile;
-import Engine.Components.ConsoleCamera;
-import Engine.Components.Drawable;
-import Engine.Components.InputComponent;
-import Engine.Components.Player;
-import Engine.Components.Position;
+import Engine.Components.Rendering.ConsoleCamera;
+import Engine.Components.Rendering.Drawable;
+import Engine.Components.Interaction.InputComponent;
+import Engine.Components.Interaction.Player;
+import Engine.Components.Physical.Position;
 import Engine.Components.Rendering.Screen;
 import Engine.Components.World.ChunkData;
 import abstraction.IEntity;

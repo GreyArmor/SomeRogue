@@ -6,13 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import Engine.Entity;
-import Engine.Components.InputComponent;
-import Engine.Components.Player;
+import Engine.Components.Interaction.InputComponent;
+import Engine.Components.Interaction.Player;
 import Engine.Input.KeyIntentTraslator;
 import abstraction.IEntity;
 import abstraction.ISystem;
-import abstraction.IWorldProvider;
 import shell.Game;
 
 public class InputSystem implements ISystem {

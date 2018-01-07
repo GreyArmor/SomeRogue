@@ -2,7 +2,7 @@ package Engine;
 
 import Engine.Components.World.ChunkData;
 import Engine.Components.World.TerrainGenerator;
-import abstraction.IWorldProvider;
+import Engine.Utility.BoundingBox;
 import com.jogamp.nativewindow.util.Point;
 import abstraction.IBoundsProvider;
 public class Chunk implements IBoundsProvider {

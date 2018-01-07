@@ -1,9 +1,6 @@
 package Engine.Components.World;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 import com.jogamp.nativewindow.util.Point;
 
@@ -21,6 +18,7 @@ public class ChunkData implements IWorldProvider {
 	TerrainGenerator terrainGenerator;
 	public ChunkData()
 	{
+		Id = UUID.randomUUID();
 		chunks = new HashMap<Point,Chunk>();
 
 		terrainGenerator = new TerrainGenerator(5);
@@ -104,5 +102,12 @@ public class ChunkData implements IWorldProvider {
 
 	public HashMap<Point,Chunk> getChunks() {
 		return chunks;
+	}
+
+	UUID Id;
+
+	@Override
+	public UUID getId() {
+		return Id;
 	}
 }

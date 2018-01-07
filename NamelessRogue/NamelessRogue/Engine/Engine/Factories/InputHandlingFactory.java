@@ -1,7 +1,7 @@
 package Engine.Factories;
 
 import Engine.Entity;
-import Engine.Components.InputComponent;
+import Engine.Components.Interaction.InputComponent;
 import abstraction.IEntity;
 
 public class InputHandlingFactory {

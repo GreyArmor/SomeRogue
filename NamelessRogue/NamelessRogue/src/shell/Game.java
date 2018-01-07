@@ -1,14 +1,12 @@
 package shell;
+ import Engine.Components.IComponent;
+ import Engine.Factories.*;
  import Engine.Systems.ChunkManagementSystem;
  import com.jogamp.opengl.*;
  import com.jogamp.opengl.awt.GLCanvas;
  import com.jogamp.opengl.util.FPSAnimator;
 
- import Engine.Factories.CharacterFactory;
-import Engine.Factories.InputHandlingFactory;
-import Engine.Factories.RenderFactory;
-import Engine.Factories.TerrainFactory;
-import Engine.Systems.InputSystem;
+ import Engine.Systems.InputSystem;
 import Engine.Systems.MovementSystem;
 import Engine.Systems.RenderingSystem;
 import abstraction.IEntity;
@@ -48,13 +46,13 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
       }
      
       
-      public <T> List<IEntity> GetEntitiesByComponentClass(Class<T> t)
+      public <T extends IComponent> List<IEntity> GetEntitiesByComponentClass(Class<T> t)
       {
     	  List<IEntity> results = Entities.stream().filter(v->v.GetComponentOfType(t)!=null).map(v->v).collect(Collectors.toList());
     	  return results;
       }
       
-      public  <T> IEntity GetEntityByComponentClass(Class<T> t)
+      public  <T extends IComponent> IEntity GetEntityByComponentClass(Class<T> t)
       {
     	  List<IEntity> results = GetEntitiesByComponentClass(t);
     	  return results.size() > 0 ? results.get(0) : null;
@@ -148,6 +146,7 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
     	  Entities.add(InputHandlingFactory.CreateInput());
     	  Entities.add(CharacterFactory.CreateSimplePlayerCharacter());
     	  Entities.add(CharacterFactory.CreateBlankNpc());
+          Entities.add(ItemFactory.CreateItem());
 
     	  Systems.add(inputsystem);
 

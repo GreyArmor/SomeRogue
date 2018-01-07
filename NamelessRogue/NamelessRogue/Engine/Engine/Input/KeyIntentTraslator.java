@@ -17,7 +17,7 @@ public class KeyIntentTraslator {
 		            break;
 				case KeyEvent.VK_NUMPAD2:
 		        case KeyEvent.VK_DOWN:
-		        	result.add(Intent.MoveDowm);
+		        	result.add(Intent.MoveDown);
 		            break;
 				case KeyEvent.VK_NUMPAD4:
 		        case KeyEvent.VK_LEFT:

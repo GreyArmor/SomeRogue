@@ -2,7 +2,7 @@ package abstraction;
 
 import com.jogamp.nativewindow.util.Point;
 
-import Engine.BoundingBox;
+import Engine.Utility.BoundingBox;
 
 public interface IBoundsProvider {
 	public BoundingBox getBoundingBox();

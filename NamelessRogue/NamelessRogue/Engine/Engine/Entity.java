@@ -3,17 +3,19 @@ package Engine;
 import java.util.UUID;
 import java.util.Vector;
 
+import Engine.Components.Component;
+import Engine.Components.IComponent;
 import abstraction.IEntity;
 
 public class Entity implements IEntity{
 
-	Vector<Object> Components;
+	Vector<IComponent> Components;
 	UUID Id;
-	public Entity(Object... components)
+	public Entity(IComponent... components)
 	{
 		Id = UUID.randomUUID();
 		Components = new Vector<>();
-		for (Object component : components) {
+		for (IComponent component : components) {
 			Components.add(component);
 		}
 	}
@@ -31,33 +33,18 @@ public class Entity implements IEntity{
 	}
 
 	@Override
-	public void AddComponent(Object component) {
-		Components.add(component);
-		
+	public <ComponentType extends IComponent> void AddComponent(ComponentType component) {
+		EntityManager.AddComponent(Id,component);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <ComponentType> ComponentType GetComponentOfType(Class<ComponentType> fType) {
-		for (Object component : Components) {
-			Boolean foundComponent = component.getClass() == fType; 
-			if(foundComponent)
-			{
-				return (ComponentType)component;
-			}
-		}
-		return null;
+	public <ComponentType extends IComponent> ComponentType GetComponentOfType(Class<ComponentType> fType) {
+		return EntityManager.GetComponent(Id,fType);
 	}
 
 	@Override
-	public <ComponentType> void RemoveComponentOfType(Class<ComponentType> fType) {
-		for (Object component : Components) {
-			Boolean foundComponent = component.getClass() == fType; 
-			if(foundComponent)
-			{
-				Components.remove(component);
-			}
-		}
-		
+	public <ComponentType extends IComponent> void RemoveComponentOfType(Class<ComponentType> fType) {
+		EntityManager.RemoveComponent(Id, fType);
 	}
 }

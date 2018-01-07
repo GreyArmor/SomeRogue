@@ -1,8 +1,8 @@
 package Engine.Systems;
 
 import Engine.Chunk;
-import Engine.Components.Player;
-import Engine.Components.Position;
+import Engine.Components.Interaction.Player;
+import Engine.Components.Physical.Position;
 import Engine.Components.World.ChunkData;
 import Engine.Constants;
 import abstraction.IEntity;

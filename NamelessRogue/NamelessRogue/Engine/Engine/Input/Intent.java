@@ -1,5 +1,5 @@
 package Engine.Input;
 
 public enum Intent {
-	MoveUp, MoveDowm, MoveLeft, MoveTopLeft, MoveTopRight, MoveBottomLeft, MoveBottomRight, MoveRight
+	MoveUp, MoveDown, MoveLeft, MoveTopLeft, MoveTopRight, MoveBottomLeft, MoveBottomRight, MoveRight, PlaceItem, DropItem
 }
