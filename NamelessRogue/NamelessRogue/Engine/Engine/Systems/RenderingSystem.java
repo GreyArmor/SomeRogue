@@ -35,7 +35,7 @@ public class RenderingSystem implements ISystem {
 	Map<Character,AtlasTileData> characterToTileMap;
     private float gameTime;
     private float angle = 0;
-    private float step = 0.01f;
+    private float step = 0.04f;
     private Random graphicalRandom = new Random();
     public RenderingSystem(GameSettings settings){
 
