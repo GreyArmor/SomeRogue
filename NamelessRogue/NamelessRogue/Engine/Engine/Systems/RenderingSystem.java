@@ -1,13 +1,13 @@
 package Engine.Systems;
 
-import java.awt.*;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import Engine.Constants;
+import Engine.Utility.Color;
 import com.jogamp.nativewindow.util.Point;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLException;
@@ -33,18 +33,11 @@ import shell.Game;
 public class RenderingSystem implements ISystem {
 
 	Map<Character,AtlasTileData> characterToTileMap;
-	private Font font = null;
-	private TextRenderer textRenderer;
-	public RenderingSystem(GameSettings settings)
-	{
-		try {
-			font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("Resources/square.ttf"));
-			font = font.deriveFont(Font.PLAIN, settings.getFontSize());
-			} catch (FontFormatException | IOException e) {
-			e.printStackTrace();
-		}
-
-		textRenderer = new TextRenderer(font);
+    private float gameTime;
+    private float angle = 0;
+    private float step = 0.01f;
+    private Random graphicalRandom = new Random();
+    public RenderingSystem(GameSettings settings){
 
         InitializeCharacterTileMap();
 	}
@@ -116,8 +109,9 @@ public class RenderingSystem implements ISystem {
 	}
 	
 	@Override
-	public void Update(Time gameTime, Game game) {
-		//todo move to constructor or some other place better suited for initialization
+	public void Update(long gameTime, Game game) {
+        this.gameTime = gameTime;
+        //todo move to constructor or some other place better suited for initialization
 		if(tileAtlas==null) {
 			initializeTexture(game.getCanvas().getGL().getGL2());
 		}
@@ -160,6 +154,11 @@ public class RenderingSystem implements ISystem {
 	private void fillcharacterBuffersWithWorld(Screen screen, ConsoleCamera camera, GameSettings settings, IWorldProvider world){
 		int camX = camera.getPosition().getX();
 		int camY = camera.getPosition().getY();
+		if(angle>360){
+			angle = 0;
+		}
+		angle +=step;
+
 		for(int x = camX; x<settings.getWidth()+camX; x++){
 		   for(int y = camY; y<settings.getHeight()+camY; y++){
 			   Tile tileToDraw = world.getTile(x, y);
@@ -167,66 +166,72 @@ public class RenderingSystem implements ISystem {
 			   if(tileToDraw.getTerrainType()==TerrainTypes.Water)
 			   {		      
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='~';
+
+				   float waveValue1 = (float) ((Math.sin(((x+y)/1.5)+angle)) + 1) / 2;
+				   float waveValue2 = (float) ((Math.sin(((x+y))+angle))/2 + 1) / 2;
+				   float waveValue3 = (float) ((Math.sin(((x+y)/3)+angle)) + 1) / 2;
+				   float resultingColor =0.3f + (0.5f *(waveValue1+waveValue2+waveValue3)/3);
+
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor= new Color(0, 0, 255);
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color(0, 255, 255);
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color(0, resultingColor, resultingColor);
 			   }
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Road)
 			   {
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='.';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.GRAY;
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0.5,0.5,0.5);
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
 			   }
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Dirt)
 			   {
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='&';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.yellow;
-				    screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor= new Color(1f,1f,0);
+				    screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
 			   }
 
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Grass)
 			   {
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='g';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.GREEN;
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0,1f,0);
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
 			   }
 
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.HardRocks)
 			   {
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='r';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.darkGray;
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0.2,0.2,0.2);
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
 			   }
 
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Rocks)
 			   {
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='r';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.gray;
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0.5,0.5,0.5);
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
 			   }
 
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.LightRocks)
 			   {
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='r';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.lightGray;
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0.8,0.8,0.8);
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
 			   }
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Sand)
 			   {
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='~';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.yellow;
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(1f,1f,0);
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
 			   }
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Snow)
 			   {
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='s';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.white;
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(1f,1f,1f);
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
 			   }
 			   else
 			   {
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char=' ';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=Color.black;
-				    screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=Color.BLACK;
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color();
+				    screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
 			   }
 			   
 		   }
@@ -380,14 +385,6 @@ public class RenderingSystem implements ISystem {
 
 		gl.glTexCoord2f(textureXend, textureY);
 		gl.glVertex3f(positionX + tileWidth, positionY + tileHeight, 0);
-
-
-
-
-
-
-
-
 
 
 		gl.glEnd();

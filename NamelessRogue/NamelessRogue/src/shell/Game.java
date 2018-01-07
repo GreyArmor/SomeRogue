@@ -33,8 +33,9 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
       List <IEntity> Entities;   
       List <ISystem> Systems;  
       InputSystem inputsystem;
+      private long startTime;
 
-	  public GLCanvas getCanvas() {
+	public GLCanvas getCanvas() {
 		  return canvas;
 	  }
 
@@ -126,7 +127,7 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
 		  mainPanel.add(paneScrollPane, BorderLayout.LINE_END );
 
 		  canvas.setSize(windowWidth, canvasSize);
-    	  this.setSize(windowWidth + 5, windowHeight+30);
+    	  this.setSize(windowWidth + 5, windowHeight+40);
     	  this.setLocationRelativeTo(null);
     	  this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	  this.setVisible(true);
@@ -184,10 +185,12 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
       @Override
       public void display(GLAutoDrawable drawable) {
 		  if (started) {
+		  	  long gametime = System.currentTimeMillis() - startTime;
+			//  WriteLineToConsole(String.valueOf(gametime));
 			  GL2 gl = drawable.getGL().getGL2();
 			  gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 			  for (ISystem system : this.Systems) {
-				  system.Update(null, this);
+				  system.Update(gametime, this);
 			  }
 			  gl.glFlush();
 		  }
@@ -196,6 +199,7 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
       
       public void play() {
     	  started  = true;
+    	  startTime = System.currentTimeMillis();
     	  while(true)
     	  {
     		 

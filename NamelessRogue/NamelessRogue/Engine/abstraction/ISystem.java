@@ -1,9 +1,7 @@
 package abstraction;
 
-import java.sql.Time;
-
 import shell.Game;
 
 public interface ISystem {
-	public void Update(Time gameTime, Game game);
+	public void Update(long gameTime, Game game);
 }

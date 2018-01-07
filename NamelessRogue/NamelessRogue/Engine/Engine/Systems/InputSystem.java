@@ -1,7 +1,6 @@
 package Engine.Systems;
 
 import java.awt.event.KeyEvent;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +20,7 @@ public class InputSystem implements ISystem {
 		pressedKeys = new ArrayList<>();
 	}
 	@Override
-	public void Update(Time gameTime, Game game) {
+	public void Update(long gameTime, Game game) {
 		for (IEntity entity : game.GetEntities()) {
 			InputComponent inputComponent = entity.GetComponentOfType(InputComponent.class);
 			Player player = entity.GetComponentOfType(Player.class);

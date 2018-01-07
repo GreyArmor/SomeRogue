@@ -11,12 +11,11 @@ import abstraction.IWorldProvider;
 import com.jogamp.nativewindow.util.Point;
 import shell.Game;
 
-import java.sql.Time;
 import java.util.ArrayList;
 
 public class ChunkManagementSystem implements ISystem {
     @Override
-    public void Update(Time gameTime, Game game) {
+    public void Update(long gameTime, Game game) {
         //not elegant TODO: think of better way
         IEntity worldEntity = game.GetEntityByComponentClass(ChunkData.class);
         IWorldProvider worldProvider = null;

@@ -1,7 +1,5 @@
 package Engine.Systems;
 
-import Engine.Components.Component;
-import Engine.Components.IComponent;
 import Engine.Components.Interaction.InputComponent;
 import Engine.Components.ItemComponents.Item;
 import Engine.Components.ItemComponents.ItemsHolder;
@@ -11,13 +9,9 @@ import abstraction.IEntity;
 import abstraction.ISystem;
 import shell.Game;
 
-import java.sql.Time;
-import java.util.List;
-import java.util.UUID;
-
 public class InventorySystem implements ISystem {
     @Override
-    public void Update(Time gameTime, Game game) {
+    public void Update(long gameTime, Game game) {
         for (IEntity entity : game.GetEntities()) {
             ItemsHolder itemsHolder = entity.GetComponentOfType(ItemsHolder.class);
             InputComponent inputComponent = entity.GetComponentOfType(InputComponent.class);

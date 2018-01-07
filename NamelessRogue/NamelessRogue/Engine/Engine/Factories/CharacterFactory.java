@@ -22,7 +22,7 @@ public class CharacterFactory {
 		playerCharacter.AddComponent(new Movable());
 		//for debug;
 		playerCharacter.AddComponent(new Position(109* Constants.ChunkSize,307*Constants.ChunkSize));
-		playerCharacter.AddComponent(new Drawable('@',Color.LIGHT_GRAY));
+		playerCharacter.AddComponent(new Drawable('@', new Engine.Utility.Color(0.7,0.7,0.7)));
 		playerCharacter.AddComponent(new Description("Player",""));
 		playerCharacter.AddComponent(new ItemsHolder());
 		playerCharacter.AddComponent(new Health(100,0,100));
@@ -37,7 +37,7 @@ public class CharacterFactory {
 		playerCharacter.AddComponent(new InputComponent());
 		playerCharacter.AddComponent(new Movable());
 		playerCharacter.AddComponent(new Position(10,10));
-		playerCharacter.AddComponent(new Drawable('D',Color.RED));
+		playerCharacter.AddComponent(new Drawable('D',new Engine.Utility.Color(1,0,0)));
 
 		return playerCharacter;
 	}

@@ -1,8 +1,8 @@
 package Engine.Components.Rendering;
 
 import Engine.Components.Component;
+import Engine.Utility.Color;
 
-import java.awt.Color;
 
 public class Drawable extends Component {
 	
@@ -13,5 +13,5 @@ public class Drawable extends Component {
 	}
 	
 	public char Representation;
-	public Color CharColor;
+	public Engine.Utility.Color CharColor;
 }

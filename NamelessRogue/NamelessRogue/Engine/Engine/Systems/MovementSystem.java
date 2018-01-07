@@ -1,7 +1,5 @@
 package Engine.Systems;
 
-import java.sql.Time;
-
 import Engine.Components.World.ChunkData;
 import Engine.TerrainTypes;
 import Engine.Tile;
@@ -17,7 +15,7 @@ import shell.Game;
 public class MovementSystem implements ISystem {
 
 	@Override
-	public void Update(Time gameTime, Game game) {
+	public void Update(long gameTime, Game game) {
 		for (IEntity entity : game.GetEntities()) {
 			Position position = entity.GetComponentOfType(Position.class);
 			InputComponent inputComponent = entity.GetComponentOfType(InputComponent.class);

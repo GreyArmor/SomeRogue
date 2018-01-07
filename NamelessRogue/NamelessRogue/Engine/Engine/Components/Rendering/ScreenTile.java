@@ -1,8 +1,8 @@
 package Engine.Components.Rendering;
 
 import Engine.Components.Component;
+import Engine.Utility.Color;
 
-import java.awt.*;
 
 /**
  * Created by Admin on 16.06.2017.
@@ -11,10 +11,10 @@ public class ScreenTile extends Component {
     public ScreenTile()
     {
         Char=' ';
-        CharColor = Color.BLACK;
-        BackGroundColor = Color.BLACK;
+        CharColor = new Color(0,0,0,0);
+        BackGroundColor = new Color(0,0,0,0);
     }
     public Character Char;
-    public Color CharColor;
-    public Color BackGroundColor;
+    public  Engine.Utility.Color CharColor;
+    public Engine.Utility.Color BackGroundColor;
 }
