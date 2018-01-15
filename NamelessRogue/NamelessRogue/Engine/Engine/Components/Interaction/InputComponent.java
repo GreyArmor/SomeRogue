@@ -15,5 +15,4 @@ public class InputComponent extends Component {
 		Intents = new ArrayList<>();
 	}
 	public List<Intent> Intents;
-	public UUID Target;
 }

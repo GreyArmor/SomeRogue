@@ -6,9 +6,11 @@ import java.util.UUID;
 
 public class Item extends Component {
     private UUID HolderId;
+    private UUID entityId;
 
-    public Item()
+    public Item(UUID entityId)
     {
+        this.entityId = entityId;
     }
     public UUID getHolderId() {
         return HolderId;
@@ -16,5 +18,9 @@ public class Item extends Component {
 
     public void setHolderId(UUID holderId) {
         HolderId = holderId;
+    }
+
+    public UUID getEntityId() {
+        return entityId;
     }
 }

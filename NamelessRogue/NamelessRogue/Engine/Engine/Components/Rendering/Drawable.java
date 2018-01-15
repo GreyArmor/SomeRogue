@@ -11,7 +11,24 @@ public class Drawable extends Component {
 		Representation=representation;
 		CharColor = charColor;
 	}
-	
-	public char Representation;
-	public Engine.Utility.Color CharColor;
+
+	private char Representation;
+	private Engine.Utility.Color CharColor;
+
+	public char getRepresentation() {
+		return Representation;
+	}
+
+	public void setRepresentation(char representation) {
+		Representation=representation;
+	}
+
+	public void setCharColor(Color charColor)
+	{
+		CharColor = charColor;
+	}
+
+	public Color getCharColor() {
+		return CharColor;
+	}
 }

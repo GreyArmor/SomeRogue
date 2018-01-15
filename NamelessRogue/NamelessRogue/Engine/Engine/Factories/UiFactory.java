@@ -8,7 +8,7 @@ import Engine.Entity;
 public class UiFactory {
     public Entity CreateHud()
     {
-        Entity Hud = new Entity();
+        Entity Hud = new Entity(null);
 
 
 

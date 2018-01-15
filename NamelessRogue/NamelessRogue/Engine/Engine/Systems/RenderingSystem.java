@@ -50,6 +50,7 @@ public class RenderingSystem implements ISystem {
         characterToTileMap.put('@',new AtlasTileData(0,11));
 		characterToTileMap.put('&',new AtlasTileData(6,13));
         characterToTileMap.put('~',new AtlasTileData(14,8));
+        characterToTileMap.put('#',new AtlasTileData(3,13));
         //alphabet
 		characterToTileMap.put('A',new AtlasTileData(1,11));
 		characterToTileMap.put('B',new AtlasTileData(2,11));
@@ -190,28 +191,28 @@ public class RenderingSystem implements ISystem {
 
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Grass)
 			   {
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='g';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='.';
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0,1f,0);
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
 			   }
 
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.HardRocks)
 			   {
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='r';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='.';
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0.2,0.2,0.2);
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
 			   }
 
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Rocks)
 			   {
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='r';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='.';
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0.5,0.5,0.5);
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
 			   }
 
 			   else  if(tileToDraw.getTerrainType()==TerrainTypes.LightRocks)
 			   {
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='r';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='.';
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0.8,0.8,0.8);
 				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
 			   }
@@ -251,8 +252,8 @@ public class RenderingSystem implements ISystem {
 				   int y = screenPoint.getY();
 				   if(x>=0 && x<settings.getWidth() && y>=0 && y < settings.getHeight())
 				   {
-					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char=drawable.Representation;
-					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=drawable.CharColor;					 
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char=drawable.getRepresentation();
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=drawable.getCharColor();
 				   }
 			   }
 		}

@@ -19,15 +19,17 @@ public class InventorySystem implements ISystem {
                 for (Intent intent : inputComponent.Intents) {
                     switch (intent) {
                         case DropItem: {
-                            Item item = EntityManager.GetComponent(inputComponent.Target);
-                            item.setHolderId(null);
+//                            Item item = EntityManager.GetComponent(inputComponent.Target);
+//                            item.setHolderId(null);
+//                            itemsHolder.getItems().remove(item);
                         }
                             break;
                         case PlaceItem: {
-                            Item item = EntityManager.GetComponent(inputComponent.Target);
-                            item.setHolderId(itemsHolder.getId());
+//                            Item item = EntityManager.GetComponent(inputComponent.Target);
+//                            item.setHolderId(itemsHolder.getId());
+//                            itemsHolder.getItems().add(item);
                         }
-                            break;
+                        break;
                         default:
                             break;
                     }

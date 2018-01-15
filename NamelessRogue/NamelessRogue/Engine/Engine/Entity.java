@@ -5,25 +5,25 @@ import java.util.Vector;
 
 import Engine.Components.Component;
 import Engine.Components.IComponent;
+import Engine.Components.JustCreated;
 import abstraction.IEntity;
 
 public class Entity implements IEntity{
 
-	Vector<IComponent> Components;
 	UUID Id;
 	public Entity(IComponent... components)
 	{
 		Id = UUID.randomUUID();
-		Components = new Vector<>();
 		for (IComponent component : components) {
-			Components.add(component);
+			EntityManager.AddComponent(Id,component);
 		}
+		EntityManager.AddComponent(Id,new JustCreated());
 	}
 	
 	public Entity()
 	{
 		Id = UUID.randomUUID();
-		Components = new Vector<>();
+		EntityManager.AddComponent(Id,new JustCreated());
 	}
 	
 	

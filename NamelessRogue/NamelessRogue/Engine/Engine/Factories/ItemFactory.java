@@ -16,7 +16,7 @@ public  class ItemFactory {
     public static Entity CreateItem()
     {
         Entity item = new Entity();
-        item.AddComponent(new Item());
+        item.AddComponent(new Item(item.GetID()));
         item.AddComponent(new Position(10,10));
         item.AddComponent(new Drawable('I',new Color(1f,0,0)));
         //for debug;

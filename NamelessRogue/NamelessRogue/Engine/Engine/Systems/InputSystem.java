@@ -19,8 +19,9 @@ public class InputSystem implements ISystem {
 	public InputSystem() {
 		pressedKeys = new ArrayList<>();
 	}
+	long currentgmatime = 0;
 	@Override
-	public void Update(long gameTime, Game game) {
+	public void Update(long gameTime, Game game){
 		for (IEntity entity : game.GetEntities()) {
 			InputComponent inputComponent = entity.GetComponentOfType(InputComponent.class);
 			Player player = entity.GetComponentOfType(Player.class);

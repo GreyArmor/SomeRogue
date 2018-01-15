@@ -23,7 +23,7 @@ public class EntityManager {
     public static <ComponentType extends IComponent> void RemoveComponent(UUID entityID, Class<ComponentType> fType) {
         Map<UUID, IComponent> componentsOfType = Components.get(fType);
         if (componentsOfType != null) {
-            Components.remove(entityID);
+            componentsOfType.remove(entityID);
         }
     }
 

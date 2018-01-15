@@ -1,15 +1,13 @@
 package shell;
  import Engine.Components.IComponent;
+ import Engine.Constants;
  import Engine.Factories.*;
- import Engine.Systems.ChunkManagementSystem;
+ import Engine.Systems.*;
  import com.jogamp.opengl.*;
  import com.jogamp.opengl.awt.GLCanvas;
  import com.jogamp.opengl.util.FPSAnimator;
 
- import Engine.Systems.InputSystem;
-import Engine.Systems.MovementSystem;
-import Engine.Systems.RenderingSystem;
-import abstraction.IEntity;
+ import abstraction.IEntity;
 import abstraction.ISystem;
  import data.GameSettings;
 
@@ -72,10 +70,9 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
 	  //private Viewport currentScene;
 	  private boolean started = false;
       public Game() {
-    	  super("Nameless rogue");
-    	  GLProfile profile = GLProfile.getDefault();
-    	  GLCapabilities capabilities = new GLCapabilities(profile);
-
+		  super("Nameless rogue");
+		  GLProfile profile = GLProfile.getDefault();
+		  GLCapabilities capabilities = new GLCapabilities(profile);
 
 
 		  //TODO: move to config later
@@ -85,82 +82,94 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
 
 		  float weight = 1.25f;
 
-		  int windowWidth = width *settings.getFontSize();
-		  int windowHeight = (int) (height* settings.getFontSize() * weight);
+		  int windowWidth = width * settings.getFontSize();
+		  int windowHeight = (int) (height * settings.getFontSize() * weight);
 		  int canvasSize = height * settings.getFontSize();
 		  int uiAreaSize = windowHeight - canvasSize;
 
 		  canvas = new GLCanvas(capabilities);
-    	  canvas.addGLEventListener(this);
-    	  canvas.addKeyListener(this);
+		  canvas.addGLEventListener(this);
+		  canvas.addKeyListener(this);
 
-    	  this.setName("Nameless rogue");
+		  this.setName("Nameless rogue");
 
 		  JPanel mainPanel = new JPanel(new BorderLayout());
 		  mainPanel.setBackground(Color.BLACK);
 
 		  characterDisplayPanel = new JPanel();
-		  characterDisplayPanel.setBorder(new LineBorder(Color.black,1));
+		  characterDisplayPanel.setBorder(new LineBorder(Color.black, 1));
 
-		  characterDisplayPanel.setSize(windowWidth/2, uiAreaSize);
-
+		  characterDisplayPanel.setSize(windowWidth / 2, uiAreaSize);
 
 
 		  textConsole = new JTextArea();
-		  textConsole.append( "New game started!." );
+		  textConsole.append("New game started!.");
 		  textConsole.setBackground(Color.BLACK);
 		  textConsole.setForeground(Color.white);
 		  textConsole.setLineWrap(true);
 		  textConsole.setWrapStyleWord(true);
-		  textConsole.setSize(windowWidth/2, uiAreaSize);
+		  textConsole.setSize(windowWidth / 2, uiAreaSize);
 		  textConsole.setBorder(new EmptyBorder(0, 0, 0, 0));
-		  textConsole.setMaximumSize(new Dimension(windowWidth/2, uiAreaSize ));
-          textConsole.setEditable(false);
+		  textConsole.setMaximumSize(new Dimension(windowWidth / 2, uiAreaSize));
+		  textConsole.setEditable(false);
 		  JScrollPane paneScrollPane = new JScrollPane(textConsole);
 		  paneScrollPane.setVerticalScrollBarPolicy(
 				  JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		  paneScrollPane.setPreferredSize(new Dimension(windowWidth/2, uiAreaSize));
+		  paneScrollPane.setPreferredSize(new Dimension(windowWidth / 2, uiAreaSize));
 		  paneScrollPane.setMinimumSize(new Dimension(0, 0));
 
 
-		  mainPanel.add(characterDisplayPanel, BorderLayout.CENTER );
-		  mainPanel.add(paneScrollPane, BorderLayout.LINE_END );
+		  mainPanel.add(characterDisplayPanel, BorderLayout.CENTER);
+		  mainPanel.add(paneScrollPane, BorderLayout.LINE_END);
 
 		  canvas.setSize(windowWidth, canvasSize);
-    	  this.setSize(windowWidth + 5, windowHeight+40);
-    	  this.setLocationRelativeTo(null);
-    	  this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	  this.setVisible(true);
-    	  this.setResizable(false);
+		  this.setSize(windowWidth + 5, windowHeight + 40);
+		  this.setLocationRelativeTo(null);
+		  this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		  this.setVisible(true);
+		  this.setResizable(false);
 
 		  this.getContentPane().add(canvas, BorderLayout.PAGE_START);
-		  this.getContentPane().add(mainPanel,BorderLayout.PAGE_END);
+		  this.getContentPane().add(mainPanel, BorderLayout.PAGE_END);
 
-    	  canvas.requestFocusInWindow();
-    	  inputsystem = new InputSystem();
+		  canvas.requestFocusInWindow();
+		  inputsystem = new InputSystem();
 
-    	  Entities = new ArrayList<>();
-    	  Systems = new ArrayList<>();
+		  Entities = new ArrayList<>();
+		  Systems = new ArrayList<>();
 
-    	  Entities.add(RenderFactory.CreateViewport(settings));
-    	  Entities.add(TerrainFactory.CreateWorld());
-    	  Entities.add(InputHandlingFactory.CreateInput());
-    	  Entities.add(CharacterFactory.CreateSimplePlayerCharacter());
-    	  Entities.add(CharacterFactory.CreateBlankNpc());
-          Entities.add(ItemFactory.CreateItem());
+		  //TODO: for test
+		  Entities.add(RenderFactory.CreateViewport(settings));
+		  Entities.add(TerrainFactory.CreateWorld());
+		  Entities.add(InputHandlingFactory.CreateInput());
+		  Entities.add(CharacterFactory.CreateSimplePlayerCharacter(109* Constants.ChunkSize,307*Constants.ChunkSize));
+		  Entities.add(CharacterFactory.CreateBlankNpc());
+		  Entities.add(ItemFactory.CreateItem());
+		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 1,307*Constants.ChunkSize,10, this));
+		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 13,307*Constants.ChunkSize,10, this));
+		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 1,307*Constants.ChunkSize + 13,10, this));
+		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 1 + 13,307*Constants.ChunkSize + 13,10, this));
 
-    	  Systems.add(inputsystem);
+		  //
 
-    	  Systems.add(new MovementSystem());
-    	  Systems.add(new ChunkManagementSystem());
-    	  Systems.add(new RenderingSystem(settings));
+		  ChunkManagementSystem chunkManagementSystem = new ChunkManagementSystem();
+		  //initialize reality bubble
+		  chunkManagementSystem.Update(0,this);
+		  //
+		  Systems.add(new InitializationSystem());
+		  Systems.add(inputsystem);
+		  Systems.add(new IntentSystem());
+		  Systems.add(new MovementSystem());
+		  Systems.add(new SwitchSystem());
+		  Systems.add(chunkManagementSystem);
+		  Systems.add(new RenderingSystem(settings));
 
-          paneScrollPane.revalidate();
-    	  FPSAnimator animator = new FPSAnimator(60);
-          animator.add(canvas);
-          animator.start();
+		  paneScrollPane.revalidate();
+		  FPSAnimator animator = new FPSAnimator(60);
+		  animator.add(canvas);
+		  animator.start();
 
-      }
+	  }
       
       public int getActualWidth()
       {
@@ -202,7 +211,7 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
     	  startTime = System.currentTimeMillis();
     	  while(true)
     	  {
-    		 
+
     	  }
       }
  
