@@ -24,7 +24,7 @@ public class AiSystem implements ISystem {
 
     @Override
     public void Update(long gameTime, Game game) {
-        if (gameTime - previousGametimeForMove > 1000) {
+        if (gameTime - previousGametimeForMove > 600) {
             previousGametimeForMove = gameTime;
             IEntity worldEntity = game.GetEntityByComponentClass(ChunkData.class);
             IWorldProvider worldProvider = null;

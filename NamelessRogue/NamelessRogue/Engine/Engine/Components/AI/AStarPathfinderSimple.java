@@ -14,10 +14,18 @@ public class AStarPathfinderSimple {
     {
         public SearchNode Parent;
         public Point NodePosition;
+        public int DinstanceToStartingNode;
 
         private SearchNode(SearchNode parent, Point nodePosition) {
             Parent = parent;
             NodePosition = nodePosition;
+            if(parent==null) {
+                DinstanceToStartingNode = 0;
+            }
+            else
+            {
+                DinstanceToStartingNode = parent.DinstanceToStartingNode+1;
+            }
         }
     }
 
@@ -28,9 +36,9 @@ public class AStarPathfinderSimple {
 
     private SearchNode FindClosest(Point destination){
         SearchNode closest = openList.stream().findFirst().get();
-        int distanceToClosest = CalculateManhattanDistance(closest.NodePosition, destination);
+        int distanceToClosest = CalculateManhattanDistance(closest.NodePosition, destination) + closest.DinstanceToStartingNode;
         for (SearchNode node : openList){
-            int distanceToCurrent = CalculateManhattanDistance(node.NodePosition, destination);
+            int distanceToCurrent = CalculateManhattanDistance(node.NodePosition, destination) + node.DinstanceToStartingNode;
             if(distanceToClosest > distanceToCurrent)
             {
                 closest = node;
@@ -80,7 +88,7 @@ public class AStarPathfinderSimple {
                 return ConstructPath(closestNode);
             }
             AddNeighborsToOpenList(closestNode, world);
-            if (closedList.stream().count()>300)
+            if (closedList.stream().count()>500)
             {
                 return null;
             }
