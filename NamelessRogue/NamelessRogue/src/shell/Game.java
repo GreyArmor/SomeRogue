@@ -163,9 +163,9 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
 		  Entities.add(TerrainFactory.CreateWorld());
 		  Entities.add(InputHandlingFactory.CreateInput());
 		  Entities.add(CharacterFactory.CreateSimplePlayerCharacter(109* Constants.ChunkSize,307*Constants.ChunkSize));
-		  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 1,307*Constants.ChunkSize));
-		  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 3,307*Constants.ChunkSize));
-		  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 5,307*Constants.ChunkSize));
+		//  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 1,307*Constants.ChunkSize));
+		//  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 3,307*Constants.ChunkSize));
+		//  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 5,307*Constants.ChunkSize));
 		  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 7,307*Constants.ChunkSize));
 		  Entities.add(ItemFactory.CreateItem());
 		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 1,307*Constants.ChunkSize,10, this));
@@ -182,6 +182,7 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
 		  Systems.add(new InitializationSystem());
 		  Systems.add(inputsystem);
 		  Systems.add(new IntentSystem());
+		  Systems.add(new AiSystem());
 		  Systems.add(new MovementSystem());
 		  Systems.add(new CombatSystem());
 		  Systems.add(new SwitchSystem());

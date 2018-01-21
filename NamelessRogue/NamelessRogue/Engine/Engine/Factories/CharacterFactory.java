@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import Engine.Components.AI.AIControlled;
+import Engine.Components.AI.BasicAi;
 import Engine.Components.AI.Character;
 import Engine.Components.IComponent;
 import Engine.Components.Interaction.InputComponent;
@@ -53,6 +55,8 @@ public class CharacterFactory {
 		npc.AddComponent(new Drawable('D', new Engine.Utility.Color(1f, 0, 0)));
 		npc.AddComponent(new Description("Very scary dummy dragon",""));
 		npc.AddComponent(new OccupiesTile());
+		npc.AddComponent(new AIControlled());
+		npc.AddComponent(new BasicAi());
 
 		npc.AddComponent(new Health(100, 0, 100));
 		npc.AddComponent(new Stamina(100, 0, 100));

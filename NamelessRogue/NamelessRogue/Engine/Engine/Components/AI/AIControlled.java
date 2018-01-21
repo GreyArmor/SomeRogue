@@ -1,3 +1,5 @@
 package Engine.Components.AI;
 
-public class AIControlled {}
+import Engine.Components.Component;
+
+public class AIControlled extends Component {}

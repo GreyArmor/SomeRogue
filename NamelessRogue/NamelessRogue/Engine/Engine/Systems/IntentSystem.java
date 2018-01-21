@@ -78,9 +78,10 @@ public class IntentSystem implements ISystem {
                                             if (simpleSwitch != null == simpleSwitch.isSwitchActive()) {
                                                 entityThatOccupiedTile.GetComponentOfType(Drawable.class).setRepresentation('o');
                                                 entityThatOccupiedTile.AddComponent(new ChangeSwitchStateCommand(simpleSwitch, false));
+                                                tileToMoveTo.setPassable(true);
                                                 game.WriteLineToConsole("Opened the door!");
                                             } else {
-                                                entity.AddComponent(new MoveToCommand(newX, newY));
+                                                entity.AddComponent(new MoveToCommand(newX, newY,entity));
                                             }
                                         }
 
@@ -91,7 +92,7 @@ public class IntentSystem implements ISystem {
 
                                         }
                                     } else {
-                                        entity.AddComponent(new MoveToCommand(newX, newY));
+                                        entity.AddComponent(new MoveToCommand(newX, newY,entity));
                                     }
                                 }
                             }

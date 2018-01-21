@@ -30,6 +30,7 @@ public class InitializationSystem implements ISystem {
                 if(occupiesTile!=null && position!=null) {
                     Tile tile = worldProvider.getTile(position.p.getX(), position.p.getY());
                     tile.getEntitiesOnTile().add(entity);
+                    tile.setPassable(false);
                 }
                 entity.RemoveComponentOfType(JustCreated.class);
             }

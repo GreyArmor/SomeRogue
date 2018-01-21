@@ -1,5 +1,6 @@
 package Engine;
 
+import Engine.Components.Physical.Position;
 import abstraction.IEntity;
 
 import java.util.ArrayList;
@@ -10,9 +11,11 @@ public class Tile {
 	
 	public Tile(TerrainTypes terrainType){
 		this.terrainType = terrainType;
+		this.isPassable = true;
 	}
 	
 	private TerrainTypes terrainType;
+	private Boolean isPassable;
 
 	public TerrainTypes getTerrainType() {
 		return terrainType;
@@ -27,5 +30,13 @@ public class Tile {
 
 	public ArrayList<IEntity> getEntitiesOnTile() {
 		return entitiesOnTile;
+	}
+
+	public void setPassable(Boolean passable) {
+		isPassable = passable;
+	}
+
+	public Boolean getPassable() {
+		return isPassable;
 	}
 }

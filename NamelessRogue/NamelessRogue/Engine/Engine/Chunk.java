@@ -43,29 +43,6 @@ public class Chunk implements IBoundsProvider {
 			}
 		}
 	}
-	
-	public void fillWithTestTiles()
-	{
-		for(int x = 0;x<Constants.ChunkSize;x++)
-		{
-			for(int y = 0;y<Constants.ChunkSize;y++)
-			{
-				if(x==0||y==0||x == Constants.ChunkSize-1||y == Constants.ChunkSize-1 )
-				{
-					chunkTiles[x][y] = new Tile(TerrainTypes.Road);
-				}
-				else if(x>Constants.ChunkSize/2)
-				{
-					chunkTiles[x][y] = new Tile(TerrainTypes.Water);
-				}
-				else
-				{
-					chunkTiles[x][y] = new Tile(TerrainTypes.Dirt);
-				}
-			}
-		}		
-		
-	}
 
 	public Tile[][] getChunkTiles() {
 		return chunkTiles;
