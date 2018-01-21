@@ -46,4 +46,10 @@ public class EntityManager {
     }
 
     public static Map<Type, Map<UUID, IComponent>> Components;
+
+    public static void RemoveEntity(UUID uuid) {
+        for (Map<UUID, IComponent> dict : Components.values()) {
+            dict.remove(uuid);
+        }
+    }
 }

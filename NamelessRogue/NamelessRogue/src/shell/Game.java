@@ -1,6 +1,8 @@
 package shell;
  import Engine.Components.IComponent;
  import Engine.Constants;
+ import Engine.Entity;
+ import Engine.EntityManager;
  import Engine.Factories.*;
  import Engine.Systems.*;
  import com.jogamp.opengl.*;
@@ -15,7 +17,10 @@ import abstraction.ISystem;
  import java.awt.event.KeyEvent;
  import java.util.ArrayList;
 import java.util.List;
+ import java.util.Optional;
+ import java.util.UUID;
  import java.util.stream.Collectors;
+ import java.util.stream.Stream;
 
  import javax.swing.*;
  import javax.swing.border.EmptyBorder;
@@ -33,17 +38,32 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
       InputSystem inputsystem;
       private long startTime;
 
-	public GLCanvas getCanvas() {
+      public GLCanvas getCanvas() {
 		  return canvas;
 	  }
 
 	  private final GLCanvas canvas;
 
-	  public  List <IEntity> GetEntities()
+	  public List <IEntity> GetEntities()
       {
     	  return Entities;
       }
-     
+      public IEntity GetEntity(UUID id){
+		  Stream<IEntity> iEntityStream = Entities.stream().filter(x -> x.GetID() == id);
+		  Optional<IEntity> any = iEntityStream.findAny();
+		  if(any.isPresent())
+		  {
+		  	return any.get();
+		  }
+		  else {
+		  	return null;
+		  }
+	  }
+
+	public void RemoveEntity(IEntity entity) {
+	  	Entities.remove(entity);
+		EntityManager.RemoveEntity(entity.GetID());
+	}
       
       public <T extends IComponent> List<IEntity> GetEntitiesByComponentClass(Class<T> t)
       {
@@ -143,7 +163,10 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
 		  Entities.add(TerrainFactory.CreateWorld());
 		  Entities.add(InputHandlingFactory.CreateInput());
 		  Entities.add(CharacterFactory.CreateSimplePlayerCharacter(109* Constants.ChunkSize,307*Constants.ChunkSize));
-		  Entities.add(CharacterFactory.CreateBlankNpc());
+		  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 1,307*Constants.ChunkSize));
+		  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 3,307*Constants.ChunkSize));
+		  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 5,307*Constants.ChunkSize));
+		  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 7,307*Constants.ChunkSize));
 		  Entities.add(ItemFactory.CreateItem());
 		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 1,307*Constants.ChunkSize,10, this));
 		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 13,307*Constants.ChunkSize,10, this));
@@ -160,7 +183,10 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
 		  Systems.add(inputsystem);
 		  Systems.add(new IntentSystem());
 		  Systems.add(new MovementSystem());
+		  Systems.add(new CombatSystem());
 		  Systems.add(new SwitchSystem());
+		  Systems.add(new DamageHandlingSystem());
+		  Systems.add(new DeathSystem());
 		  Systems.add(chunkManagementSystem);
 		  Systems.add(new RenderingSystem(settings));
 
@@ -277,4 +303,6 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
 		textConsole.setCaretPosition(textConsole.getDocument().getLength());
 
 	}
-  }
+
+
+}

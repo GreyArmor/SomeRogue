@@ -51,6 +51,8 @@ public class RenderingSystem implements ISystem {
 		characterToTileMap.put('&',new AtlasTileData(6,13));
         characterToTileMap.put('~',new AtlasTileData(14,8));
         characterToTileMap.put('#',new AtlasTileData(3,13));
+		characterToTileMap.put('$',new AtlasTileData(4,13));
+		characterToTileMap.put('%',new AtlasTileData(5,13));
         //alphabet
 		characterToTileMap.put('A',new AtlasTileData(1,11));
 		characterToTileMap.put('B',new AtlasTileData(2,11));

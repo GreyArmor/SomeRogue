@@ -1,10 +1,9 @@
 package Engine.Systems;
 
+import Engine.Components.AI.Character;
+import Engine.Components.Component;
 import Engine.Components.Environment.Door;
-import Engine.Components.Interaction.ChangeSwitchStateCommand;
-import Engine.Components.Interaction.InputComponent;
-import Engine.Components.Interaction.MoveToCommand;
-import Engine.Components.Interaction.SimpleSwitch;
+import Engine.Components.Interaction.*;
 import Engine.Components.Physical.OccupiesTile;
 import Engine.Components.Physical.Position;
 import Engine.Components.Rendering.Drawable;
@@ -73,6 +72,7 @@ public class IntentSystem implements ISystem {
 
                                     if (entityThatOccupiedTile != null) {
                                         Door door = entityThatOccupiedTile.GetComponentOfType(Door.class);
+                                        Character characterComponent = entityThatOccupiedTile.GetComponentOfType(Character.class);
                                         if (door != null) {
                                             SimpleSwitch simpleSwitch = entityThatOccupiedTile.GetComponentOfType(SimpleSwitch.class);
                                             if (simpleSwitch != null == simpleSwitch.isSwitchActive()) {
@@ -82,6 +82,13 @@ public class IntentSystem implements ISystem {
                                             } else {
                                                 entity.AddComponent(new MoveToCommand(newX, newY));
                                             }
+                                        }
+
+                                        if(characterComponent!=null){
+                                            //TODO: if hostile
+                                            entity.AddComponent( new AttackCommand(entity, entityThatOccupiedTile));
+                                            //TODO: do something else if friendly: chat, trade, etc
+
                                         }
                                     } else {
                                         entity.AddComponent(new MoveToCommand(newX, newY));
