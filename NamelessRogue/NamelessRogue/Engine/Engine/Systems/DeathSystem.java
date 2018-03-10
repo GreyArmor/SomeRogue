@@ -1,18 +1,16 @@
 package Engine.Systems;
 
 import Engine.Components.Interaction.DeathCommand;
-import Engine.Components.JustCreated;
 import Engine.Components.Physical.OccupiesTile;
 import Engine.Components.Physical.Position;
 import Engine.Components.Rendering.Drawable;
-import Engine.Components.Status.Damage;
 import Engine.Components.Status.Dead;
 import Engine.Components.UI.Description;
-import Engine.Components.World.ChunkData;
-import Engine.Tile;
+import Engine.Components.ChunksAndTiles.ChunkData;
+import Engine.Components.ChunksAndTiles.Tile;
 import abstraction.IEntity;
 import abstraction.ISystem;
-import abstraction.IWorldProvider;
+import abstraction.IChunkProvider;
 import shell.Game;
 
 public class DeathSystem implements ISystem {
@@ -31,7 +29,7 @@ public class DeathSystem implements ISystem {
                 }
 
                 IEntity worldEntity = game.GetEntityByComponentClass(ChunkData.class);
-                IWorldProvider worldProvider = null;
+                IChunkProvider worldProvider = null;
                 if (worldEntity != null) {
                     worldProvider = worldEntity.GetComponentOfType(ChunkData.class);
                 }

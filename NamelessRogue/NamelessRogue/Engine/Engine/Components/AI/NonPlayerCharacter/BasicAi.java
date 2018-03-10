@@ -1,7 +1,6 @@
-package Engine.Components.AI;
+package Engine.Components.AI.NonPlayerCharacter;
 
 import Engine.Components.Component;
-import Engine.Components.Physical.Position;
 import com.jogamp.nativewindow.util.Point;
 
 import java.util.ArrayList;

@@ -1,9 +1,8 @@
-package Engine.Components.World;
+package Engine.Components.ChunksAndTiles;
 
 import Engine.Constants;
-import Engine.Noise.ImageWriter;
 import Engine.Noise.SimplexNoise;
-import Engine.Tile;
+import com.jogamp.nativewindow.util.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,6 +112,6 @@ public class TerrainGenerator {
         if (result <= 0.5) {
             result = 0;
         }
-        return TileNoiseInterpreter.GetTile(result);
+        return new Tile(TileNoiseInterpreter.GetTerrain(result), new Point(x,y));
     }
 }

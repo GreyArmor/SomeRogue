@@ -1,16 +1,12 @@
-package Engine.Components.World;
+package Engine.Components.ChunksAndTiles;
 
 import Engine.TerrainTypes;
-import Engine.Tile;
-
-import java.awt.*;
-import java.io.Console;
 
 /**
  * Created by Admin on 05.12.2017.
  */
 public class TileNoiseInterpreter {
-    public static Tile GetTile(double noiseValue)
+    public static TerrainTypes GetTerrain(double noiseValue)
     {
         if (noiseValue>1){
             noiseValue=1;
@@ -20,28 +16,28 @@ public class TileNoiseInterpreter {
         }
         System.out.print(noiseValue);
         System.out.print("\n");
-        Tile t = null;
+        TerrainTypes t = null;
         if(noiseValue>0.80) {
-            t  = new Tile(TerrainTypes.Snow);
+            t  = TerrainTypes.Snow;
         }
         else if(noiseValue>0.75) {
-            t  = new Tile(TerrainTypes.HardRocks);
+            t  = TerrainTypes.HardRocks;
         }
 
         else if(noiseValue>0.7) {
-            t  = new Tile(TerrainTypes.Rocks);
+            t  = TerrainTypes.Rocks;
         }
         else if(noiseValue>0.65) {
-        t  = new Tile(TerrainTypes.LightRocks);
+        t  = TerrainTypes.LightRocks;
         }
         else if(noiseValue>0.51) {
-            t  = new Tile(TerrainTypes.Grass);
+            t  = TerrainTypes.Grass;
         }
         else if(noiseValue>=0.5) {
-            t  = new Tile(TerrainTypes.Sand);
+            t  = TerrainTypes.Sand;
         }
         else if(noiseValue<0.5) {
-            t  = new Tile(TerrainTypes.Water);
+            t  =  TerrainTypes.Water;
         }
         return t;
     }

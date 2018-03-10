@@ -1,8 +1,7 @@
-package Engine.Components.AI;
+package Engine.Components.AI.NonPlayerCharacter;
 
-import Engine.Components.Physical.Position;
-import Engine.Tile;
-import abstraction.IWorldProvider;
+import Engine.Components.ChunksAndTiles.Tile;
+import abstraction.IChunkProvider;
 import com.jogamp.nativewindow.util.Point;
 
 import java.util.ArrayList;
@@ -15,8 +14,9 @@ public class AStarPathfinderSimple {
         public SearchNode Parent;
         public Point NodePosition;
         public int DinstanceToStartingNode;
+        public int DinstanceToDestinationNode;
 
-        private SearchNode(SearchNode parent, Point nodePosition) {
+        private SearchNode(SearchNode parent, Point nodePosition, Point destination) {
             Parent = parent;
             NodePosition = nodePosition;
             if(parent==null) {
@@ -26,19 +26,25 @@ public class AStarPathfinderSimple {
             {
                 DinstanceToStartingNode = parent.DinstanceToStartingNode+1;
             }
+
+            DinstanceToDestinationNode = CalculateManhattanDistance(nodePosition, destination);
+
         }
+
+        private int CalculateManhattanDistance(Point a, Point b)
+        {
+            return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
+        }
+
     }
 
-    private int CalculateManhattanDistance(Point a, Point b)
-    {
-            return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - a.getY());
-    }
 
-    private SearchNode FindClosest(Point destination){
+
+    private SearchNode FindClosest(){
         SearchNode closest = openList.stream().findFirst().get();
-        int distanceToClosest = CalculateManhattanDistance(closest.NodePosition, destination) + closest.DinstanceToStartingNode;
+        int distanceToClosest = closest.DinstanceToDestinationNode + closest.DinstanceToStartingNode;
         for (SearchNode node : openList){
-            int distanceToCurrent = CalculateManhattanDistance(node.NodePosition, destination) + node.DinstanceToStartingNode;
+            int distanceToCurrent = node.DinstanceToDestinationNode + node.DinstanceToStartingNode;
             if(distanceToClosest > distanceToCurrent)
             {
                 closest = node;
@@ -48,7 +54,7 @@ public class AStarPathfinderSimple {
         return closest;
     }
 
-    private void AddNeighborsToOpenList(SearchNode node, IWorldProvider world)
+    private void AddNeighborsToOpenList(SearchNode node, IChunkProvider world, Point destination)
     {
         for (int x = node.NodePosition.getX() - 1; x<=node.NodePosition.getX()+1; x++)
         {
@@ -59,11 +65,11 @@ public class AStarPathfinderSimple {
                 if (!isInClosed && !isInOpen) {
                     Tile t = world.getTile(x,y);
                     if(t.getPassable()) {
-                        openList.add(new SearchNode(node, currentposition));
+                        openList.add(new SearchNode(node, currentposition, destination));
                     }
                     else
                     {
-                        closedList.add(new SearchNode(node, currentposition));
+                        closedList.add(new SearchNode(node, currentposition, destination));
                     }
                 }
             }
@@ -72,22 +78,29 @@ public class AStarPathfinderSimple {
 
     ArrayList<SearchNode> openList;
     ArrayList<SearchNode> closedList;
-    public ArrayList<Point> FindPath(Point start, Point destination, IWorldProvider world){
+    boolean seachNearPosiiton;
+    public ArrayList<Point> FindPath(Point start, Point destination, IChunkProvider world, boolean positionNear){
+        seachNearPosiiton = positionNear;
         openList = new ArrayList<>();
         closedList = new ArrayList<>();
 
-        openList.add(new SearchNode(null, start));
+        openList.add(new SearchNode(null, start,destination));
 
         while (openList.stream().count()>0)
         {
-            SearchNode closestNode = FindClosest(destination);
+            SearchNode closestNode = FindClosest();
             openList.remove(closestNode);
             closedList.add(closestNode);
             if(closestNode.NodePosition.equals(destination))
             {
                 return ConstructPath(closestNode);
             }
-            AddNeighborsToOpenList(closestNode, world);
+
+            if(seachNearPosiiton && closestNode.DinstanceToDestinationNode==1)
+            {
+                return ConstructPath(closestNode);
+            }
+            AddNeighborsToOpenList(closestNode, world, destination);
             if (closedList.stream().count()>500)
             {
                 return null;

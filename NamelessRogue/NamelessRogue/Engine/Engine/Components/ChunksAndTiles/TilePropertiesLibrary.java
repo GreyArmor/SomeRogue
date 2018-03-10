@@ -1,4 +1,4 @@
-package Engine.Components.World;
+package Engine.Components.ChunksAndTiles;
 
 /**
  * Created by Admin on 14.06.2017.

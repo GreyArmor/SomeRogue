@@ -11,20 +11,19 @@ import Engine.Utility.Color;
 import com.jogamp.nativewindow.util.Point;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLException;
-import com.jogamp.opengl.util.awt.TextRenderer;
 
 import Engine.TerrainTypes;
-import Engine.Tile;
+import Engine.Components.ChunksAndTiles.Tile;
 import Engine.Components.Rendering.ConsoleCamera;
 import Engine.Components.Rendering.Drawable;
 import Engine.Components.Interaction.InputComponent;
 import Engine.Components.Interaction.Player;
 import Engine.Components.Physical.Position;
 import Engine.Components.Rendering.Screen;
-import Engine.Components.World.ChunkData;
+import Engine.Components.ChunksAndTiles.ChunkData;
 import abstraction.IEntity;
 import abstraction.ISystem;
-import abstraction.IWorldProvider;
+import abstraction.IChunkProvider;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
 import data.GameSettings;
@@ -119,7 +118,7 @@ public class RenderingSystem implements ISystem {
 			initializeTexture(game.getCanvas().getGL().getGL2());
 		}
 		IEntity worldEntity = game.GetEntityByComponentClass(ChunkData.class);
-		IWorldProvider worldProvider = null;
+		IChunkProvider worldProvider = null;
 		if(worldEntity!=null)
 		{
 			worldProvider = worldEntity.GetComponentOfType(ChunkData.class);
@@ -154,7 +153,7 @@ public class RenderingSystem implements ISystem {
 	
 	
 	
-	private void fillcharacterBuffersWithWorld(Screen screen, ConsoleCamera camera, GameSettings settings, IWorldProvider world){
+	private void fillcharacterBuffersWithWorld(Screen screen, ConsoleCamera camera, GameSettings settings, IChunkProvider world){
 		int camX = camera.getPosition().getX();
 		int camY = camera.getPosition().getY();
 		if(angle>360){

@@ -1,13 +1,13 @@
 package Engine.Systems;
 
-import Engine.Chunk;
+import Engine.Components.ChunksAndTiles.Chunk;
 import Engine.Components.Interaction.Player;
 import Engine.Components.Physical.Position;
-import Engine.Components.World.ChunkData;
+import Engine.Components.ChunksAndTiles.ChunkData;
 import Engine.Constants;
 import abstraction.IEntity;
 import abstraction.ISystem;
-import abstraction.IWorldProvider;
+import abstraction.IChunkProvider;
 import com.jogamp.nativewindow.util.Point;
 import shell.Game;
 
@@ -18,7 +18,7 @@ public class ChunkManagementSystem implements ISystem {
     public void Update(long gameTime, Game game) {
         //not elegant TODO: think of better way
         IEntity worldEntity = game.GetEntityByComponentClass(ChunkData.class);
-        IWorldProvider worldProvider = null;
+        IChunkProvider worldProvider = null;
         if (worldEntity != null) {
             worldProvider = worldEntity.GetComponentOfType(ChunkData.class);
         }

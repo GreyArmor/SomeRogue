@@ -1,6 +1,6 @@
 package Engine.Utility;
 
-import Engine.Chunk;
+import Engine.Components.ChunksAndTiles.Chunk;
 import com.jogamp.nativewindow.util.Point;
 
 public class BoundingBox {

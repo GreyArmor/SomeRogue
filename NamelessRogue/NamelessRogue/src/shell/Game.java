@@ -162,16 +162,19 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
 		  Entities.add(RenderFactory.CreateViewport(settings));
 		  Entities.add(TerrainFactory.CreateWorld());
 		  Entities.add(InputHandlingFactory.CreateInput());
+
+		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 1,307*Constants.ChunkSize,10, this));
+		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 13,307*Constants.ChunkSize,10, this));
+		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 1,307*Constants.ChunkSize + 13,10, this));
+		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 1 + 13,307*Constants.ChunkSize + 13,10, this));
+
 		  Entities.add(CharacterFactory.CreateSimplePlayerCharacter(109* Constants.ChunkSize,307*Constants.ChunkSize));
 		//  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 1,307*Constants.ChunkSize));
 		//  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 3,307*Constants.ChunkSize));
 		//  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 5,307*Constants.ChunkSize));
 		  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 7,307*Constants.ChunkSize));
 		  Entities.add(ItemFactory.CreateItem());
-		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 1,307*Constants.ChunkSize,10, this));
-		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 13,307*Constants.ChunkSize,10, this));
-		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 1,307*Constants.ChunkSize + 13,10, this));
-		  Entities.add(BuildingFactory.CreateDummyBuilding(109* Constants.ChunkSize + 1 + 13,307*Constants.ChunkSize + 13,10, this));
+
 
 		  //
 

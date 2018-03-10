@@ -1,18 +1,17 @@
 package Engine.Systems;
 
-import Engine.Components.AI.Character;
-import Engine.Components.Component;
+import Engine.Components.AI.NonPlayerCharacter.Character;
 import Engine.Components.Environment.Door;
 import Engine.Components.Interaction.*;
 import Engine.Components.Physical.OccupiesTile;
 import Engine.Components.Physical.Position;
 import Engine.Components.Rendering.Drawable;
-import Engine.Components.World.ChunkData;
+import Engine.Components.ChunksAndTiles.ChunkData;
 import Engine.Input.Intent;
-import Engine.Tile;
+import Engine.Components.ChunksAndTiles.Tile;
 import abstraction.IEntity;
 import abstraction.ISystem;
-import abstraction.IWorldProvider;
+import abstraction.IChunkProvider;
 import shell.Game;
 
 public class IntentSystem implements ISystem {
@@ -54,7 +53,7 @@ public class IntentSystem implements ISystem {
                                                             position.p.getY();
 
                                     IEntity worldEntity = game.GetEntityByComponentClass(ChunkData.class);
-                                    IWorldProvider worldProvider = null;
+                                    IChunkProvider worldProvider = null;
                                     if (worldEntity != null) {
                                         worldProvider = worldEntity.GetComponentOfType(ChunkData.class);
                                     }

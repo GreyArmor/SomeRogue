@@ -1,22 +1,20 @@
 package Engine.Systems;
 
-import Engine.Components.AI.AIControlled;
-import Engine.Components.AI.AStarPathfinderSimple;
-import Engine.Components.AI.BasicAi;
-import Engine.Components.AI.BasicAiStates;
-import Engine.Components.Interaction.AttackCommand;
+import Engine.Components.AI.NonPlayerCharacter.AIControlled;
+import Engine.Components.AI.NonPlayerCharacter.AStarPathfinderSimple;
+import Engine.Components.AI.NonPlayerCharacter.BasicAi;
+import Engine.Components.AI.NonPlayerCharacter.BasicAiStates;
 import Engine.Components.Interaction.MoveToCommand;
 import Engine.Components.Interaction.Player;
 import Engine.Components.Physical.Position;
-import Engine.Components.World.ChunkData;
-import Engine.Tile;
+import Engine.Components.ChunksAndTiles.ChunkData;
+import Engine.Components.ChunksAndTiles.Tile;
 import abstraction.IEntity;
 import abstraction.ISystem;
-import abstraction.IWorldProvider;
+import abstraction.IChunkProvider;
 import com.jogamp.nativewindow.util.Point;
 import shell.Game;
 
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public class AiSystem implements ISystem {
@@ -24,10 +22,10 @@ public class AiSystem implements ISystem {
 
     @Override
     public void Update(long gameTime, Game game) {
-        if (gameTime - previousGametimeForMove > 600) {
+        if (gameTime - previousGametimeForMove > 150) {
             previousGametimeForMove = gameTime;
             IEntity worldEntity = game.GetEntityByComponentClass(ChunkData.class);
-            IWorldProvider worldProvider = null;
+            IChunkProvider worldProvider = null;
             if(worldEntity!=null)
             {
                 worldProvider = worldEntity.GetComponentOfType(ChunkData.class);
@@ -45,12 +43,14 @@ public class AiSystem implements ISystem {
 
                                     Position playerPosition = game.GetEntityByComponentClass(Player.class).GetComponentOfType(Position.class);
                                     Position position = entity.GetComponentOfType(Position.class);
-                                    game.WriteLineToConsole("Starting movement state idle position = " + position.p.toString());
+                                  //  game.WriteLineToConsole("Starting movement state idle position = " + position.p.toString());
                                     if (position != null) {
                                         AStarPathfinderSimple pathfinder = new AStarPathfinderSimple();
-                                        ArrayList<Point> path = pathfinder.FindPath(position.p, new Point(playerPosition.p.getX()+1,playerPosition.p.getY()), worldProvider);
+
+
+                                        ArrayList<Point> path = pathfinder.FindPath(position.p, new Point(playerPosition.p.getX(), playerPosition.p.getY()), worldProvider, true);
                                         if (path == null) {
-                                            path = pathfinder.FindPath(position.p,  new Point(playerPosition.p.getX()+1,playerPosition.p.getY()), worldProvider);
+                                            path = pathfinder.FindPath(position.p,  new Point(playerPosition.p.getX(), playerPosition.p.getY()), worldProvider, true);
                                         }
                                         if (path != null) {
                                             basicAi.setRoute(path);
@@ -63,7 +63,7 @@ public class AiSystem implements ISystem {
                                     break;
                                 case Moving: {
                                     Position position = entity.GetComponentOfType(Position.class);
-                                    game.WriteLineToConsole("moving position = " + position.p.toString());
+                             //       game.WriteLineToConsole("moving position = " + position.p.toString());
 
                                     ArrayList<Point> route = basicAi.getRoute();
                                     if (route.stream().count() > 0 && position!=null) {
@@ -72,9 +72,9 @@ public class AiSystem implements ISystem {
 
                                         if (!tileToMoveTo.getPassable()) {
                                             AStarPathfinderSimple pathfinder = new AStarPathfinderSimple();
-                                            ArrayList<Point> path = pathfinder.FindPath(position.p, route.get((int) (route.stream().count() - 1)), worldProvider);
+                                            ArrayList<Point> path = pathfinder.FindPath(position.p, route.get((int) (route.stream().count())), worldProvider,true);
                                             if (path == null) {
-                                                path = pathfinder.FindPath(position.p, route.get((int) (route.stream().count() - 1)), worldProvider);
+                                                path = pathfinder.FindPath(position.p, route.get((int) (route.stream().count())), worldProvider, true);
                                             }
                                             if (path != null) {
                                                 basicAi.setRoute(path);
@@ -82,7 +82,7 @@ public class AiSystem implements ISystem {
                                                 route.clear();
                                             }
                                         }
-                                        game.WriteLineToConsole("moving to nextPosition  = " + nextPosition.toString());
+                                       // game.WriteLineToConsole("moving to nextPosition  = " + nextPosition.toString());
                                         MoveToCommand mc = new MoveToCommand(nextPosition.getX(), nextPosition.getY(), entity);
                                         entity.AddComponent(mc);
                                         if(route.stream().count()>0) {

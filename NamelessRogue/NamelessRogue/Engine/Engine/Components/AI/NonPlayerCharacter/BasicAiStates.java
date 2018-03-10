@@ -1,4 +1,4 @@
-package Engine.Components.AI;
+package Engine.Components.AI.NonPlayerCharacter;
 
 public enum BasicAiStates {
     Idle, Attacking, Following, Moving

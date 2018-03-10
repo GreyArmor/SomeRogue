@@ -3,11 +3,11 @@ package Engine.Systems;
 import Engine.Components.JustCreated;
 import Engine.Components.Physical.OccupiesTile;
 import Engine.Components.Physical.Position;
-import Engine.Components.World.ChunkData;
-import Engine.Tile;
+import Engine.Components.ChunksAndTiles.ChunkData;
+import Engine.Components.ChunksAndTiles.Tile;
 import abstraction.IEntity;
 import abstraction.ISystem;
-import abstraction.IWorldProvider;
+import abstraction.IChunkProvider;
 import shell.Game;
 
 public class InitializationSystem implements ISystem {
@@ -15,7 +15,7 @@ public class InitializationSystem implements ISystem {
     public void Update(long gameTime, Game game) {
 
         IEntity worldEntity = game.GetEntityByComponentClass(ChunkData.class);
-        IWorldProvider worldProvider = null;
+        IChunkProvider worldProvider = null;
         if(worldEntity!=null)
         {
             worldProvider = worldEntity.GetComponentOfType(ChunkData.class);

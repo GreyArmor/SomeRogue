@@ -1,13 +1,8 @@
 package Engine.Factories;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-
-import Engine.Components.AI.AIControlled;
-import Engine.Components.AI.BasicAi;
-import Engine.Components.AI.Character;
-import Engine.Components.IComponent;
+import Engine.Components.AI.NonPlayerCharacter.AIControlled;
+import Engine.Components.AI.NonPlayerCharacter.BasicAi;
+import Engine.Components.AI.NonPlayerCharacter.Character;
 import Engine.Components.Interaction.InputComponent;
 import Engine.Components.Interaction.Movable;
 import Engine.Components.Interaction.Player;
@@ -17,7 +12,6 @@ import Engine.Components.Physical.Position;
 import Engine.Components.Rendering.Drawable;
 import Engine.Components.Stats.*;
 import Engine.Components.UI.Description;
-import Engine.Constants;
 import Engine.Entity;
 
 public class CharacterFactory {

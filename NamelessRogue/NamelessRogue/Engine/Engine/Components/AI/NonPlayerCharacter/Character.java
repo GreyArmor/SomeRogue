@@ -1,4 +1,4 @@
-package Engine.Components.AI;
+package Engine.Components.AI.NonPlayerCharacter;
 
 import Engine.Components.Component;
 

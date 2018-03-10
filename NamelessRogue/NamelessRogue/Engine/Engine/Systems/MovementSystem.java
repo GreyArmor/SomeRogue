@@ -1,9 +1,9 @@
 package Engine.Systems;
 
 import Engine.Components.Interaction.MoveToCommand;
-import Engine.Components.World.ChunkData;
-import Engine.Tile;
-import abstraction.IWorldProvider;
+import Engine.Components.ChunksAndTiles.ChunkData;
+import Engine.Components.ChunksAndTiles.Tile;
+import abstraction.IChunkProvider;
 
 import Engine.Components.Physical.Position;
 import abstraction.IEntity;
@@ -22,7 +22,7 @@ public class MovementSystem implements ISystem {
 				if (position != null) {
 
 					IEntity worldEntity = game.GetEntityByComponentClass(ChunkData.class);
-					IWorldProvider worldProvider = null;
+					IChunkProvider worldProvider = null;
 					if (worldEntity != null) {
 						worldProvider = worldEntity.GetComponentOfType(ChunkData.class);
 					}
