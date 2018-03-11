@@ -1,8 +1,7 @@
 package shell;
  import Engine.Components.IComponent;
- import Engine.Constants;
- import Engine.Entity;
- import Engine.EntityManager;
+ import Engine.Infrastructure.Constants;
+ import Engine.Infrastructure.EntityManager;
  import Engine.Factories.*;
  import Engine.Systems.*;
  import com.jogamp.opengl.*;
@@ -26,14 +25,11 @@ import java.util.List;
  import javax.swing.border.EmptyBorder;
  import javax.swing.border.LineBorder;
  import javax.swing.text.BadLocationException;
- import javax.swing.text.DefaultCaret;
-
- import static javax.swing.text.DefaultCaret.ALWAYS_UPDATE;
 
 public class Game extends JFrame implements GLEventListener,java.awt.event.KeyListener {
       private static final long serialVersionUID = 1L;
      
-      List <IEntity> Entities;   
+      List <IEntity> Entities;
       List <ISystem> Systems;  
       InputSystem inputsystem;
       private long startTime;
@@ -49,7 +45,7 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
     	  return Entities;
       }
       public IEntity GetEntity(UUID id){
-		  Stream<IEntity> iEntityStream = Entities.stream().filter(x -> x.GetID() == id);
+		  Stream<IEntity> iEntityStream = Entities.stream().filter(x -> x.GetId() == id);
 		  Optional<IEntity> any = iEntityStream.findAny();
 		  if(any.isPresent())
 		  {
@@ -62,7 +58,7 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
 
 	public void RemoveEntity(IEntity entity) {
 	  	Entities.remove(entity);
-		EntityManager.RemoveEntity(entity.GetID());
+		EntityManager.RemoveEntity(entity.GetId());
 	}
       
       public <T extends IComponent> List<IEntity> GetEntitiesByComponentClass(Class<T> t)
@@ -185,7 +181,7 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
 		  Systems.add(new InitializationSystem());
 		  Systems.add(inputsystem);
 		  Systems.add(new IntentSystem());
-		  Systems.add(new AiSystem());
+		//  Systems.add(new AiSystem());
 		  Systems.add(new MovementSystem());
 		  Systems.add(new CombatSystem());
 		  Systems.add(new SwitchSystem());

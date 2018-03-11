@@ -1,18 +1,27 @@
 package Engine.Components.ChunksAndTiles;
 
-import Engine.Constants;
+import Engine.Infrastructure.Constants;
+import Engine.Infrastructure.TerrainTypes;
+import Engine.Serialization.SaveManager;
 import Engine.Utility.BoundingBox;
 import com.jogamp.nativewindow.util.Point;
 import abstraction.IBoundsProvider;
+
+import java.io.File;
+import java.io.IOException;
+
 public class Chunk implements IBoundsProvider {
 	private Point worldPositionBottomLeftCorner;
-	private ChunkData chunkContainer;
+	private transient  ChunkData chunkContainer;
 
 	private Tile[][] chunkTiles;
-	private BoundingBox boundingBox;
-	private boolean isActive;
-	
-		
+	private transient  BoundingBox boundingBox;
+	private transient boolean isActive;
+
+	public Chunk() {
+	}
+
+	public boolean IsActive(){return isActive;}
 	public Point getWorldPosition() {
 		return worldPositionBottomLeftCorner;
 	}
@@ -34,11 +43,24 @@ public class Chunk implements IBoundsProvider {
 
 	public void FillWithTiles(TerrainGenerator generator)
 	{
+
 		for(int x = 0; x<Constants.ChunkSize;x++)
 		{
 			for(int y = 0;y<Constants.ChunkSize;y++)
 			{
 				chunkTiles[x][y] = generator.GetTile(x+worldPositionBottomLeftCorner.getX(),y + worldPositionBottomLeftCorner.getY());
+			}
+		}
+	}
+
+	public void FillWithDebugTiles(TerrainGenerator generator)
+	{
+
+		for(int x = 0; x<Constants.ChunkSize;x++)
+		{
+			for(int y = 0;y<Constants.ChunkSize;y++)
+			{
+				chunkTiles[x][y] = new Tile(TerrainTypes.HardRocks,  new Point(x+worldPositionBottomLeftCorner.getX(), y + worldPositionBottomLeftCorner.getY()));
 			}
 		}
 	}
@@ -79,6 +101,7 @@ public class Chunk implements IBoundsProvider {
 	}
 
 	public void Activate() {
+		System.out.print("Activate\n");
 		isActive = true;
 		chunkTiles = new Tile[Constants.ChunkSize][Constants.ChunkSize];
 		if(!LoadFromDisk())
@@ -89,11 +112,37 @@ public class Chunk implements IBoundsProvider {
 	}
 //TODO: serialization
 	private boolean LoadFromDisk() {
+
+		String appPath = "";
+		try {
+			appPath = new File(".").getCanonicalPath();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Tile[][] tiles = SaveManager.LoadChunk(appPath+"\\Chunks",
+				String.valueOf(worldPositionBottomLeftCorner.getX()) + "_" + String.valueOf(worldPositionBottomLeftCorner.getY()));
+		if (tiles != null) {
+
+			chunkTiles = tiles;
+			System.out.print("LoadFromDisk true\n");
+			return true;
+		}
+		System.out.print("LoadFromDisk false\n");
 		return false;
 	}
 
 	public void Deactivate()
 	{
+		String appPath = "";
+		try {
+			appPath = new File(".").getCanonicalPath();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.print("Deactivate\n");
+		SaveManager.SaveChunk(appPath+"\\Chunks",this,
+				String.valueOf(worldPositionBottomLeftCorner.getX()) + "_" + String.valueOf(worldPositionBottomLeftCorner.getY()));
+
 		isActive = false;
 		chunkTiles = null;
 	}

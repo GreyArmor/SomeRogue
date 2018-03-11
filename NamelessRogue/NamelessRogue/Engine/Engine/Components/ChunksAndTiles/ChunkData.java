@@ -4,8 +4,8 @@ import java.util.*;
 
 import com.jogamp.nativewindow.util.Point;
 
-import Engine.Constants;
-import Engine.TerrainTypes;
+import Engine.Infrastructure.Constants;
+import Engine.Infrastructure.TerrainTypes;
 import abstraction.IChunkProvider;
 
 public class ChunkData implements IChunkProvider {

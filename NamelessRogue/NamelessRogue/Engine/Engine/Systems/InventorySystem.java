@@ -1,9 +1,7 @@
 package Engine.Systems;
 
 import Engine.Components.Interaction.InputComponent;
-import Engine.Components.ItemComponents.Item;
 import Engine.Components.ItemComponents.ItemsHolder;
-import Engine.EntityManager;
 import Engine.Input.Intent;
 import abstraction.IEntity;
 import abstraction.ISystem;

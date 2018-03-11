@@ -5,6 +5,7 @@ import Engine.Components.Physical.OccupiesTile;
 import Engine.Components.Physical.Position;
 import Engine.Components.ChunksAndTiles.ChunkData;
 import Engine.Components.ChunksAndTiles.Tile;
+import Engine.Infrastructure.Entity;
 import abstraction.IEntity;
 import abstraction.ISystem;
 import abstraction.IChunkProvider;
@@ -29,7 +30,7 @@ public class InitializationSystem implements ISystem {
                 OccupiesTile occupiesTile = entity.GetComponentOfType(OccupiesTile.class);
                 if(occupiesTile!=null && position!=null) {
                     Tile tile = worldProvider.getTile(position.p.getX(), position.p.getY());
-                    tile.getEntitiesOnTile().add(entity);
+                    tile.getEntitiesOnTile().add((Entity)entity);
                     tile.setPassable(false);
                 }
                 entity.RemoveComponentOfType(JustCreated.class);

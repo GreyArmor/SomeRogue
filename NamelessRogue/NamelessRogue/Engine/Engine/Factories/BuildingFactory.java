@@ -7,7 +7,7 @@ import Engine.Components.Physical.OccupiesTile;
 import Engine.Components.Physical.Position;
 import Engine.Components.Rendering.Drawable;
 import Engine.Components.UI.Description;
-import Engine.Entity;
+import Engine.Infrastructure.Entity;
 import abstraction.IEntity;
 import shell.Game;
 

@@ -1,6 +1,6 @@
 package Engine.Components.ChunksAndTiles;
 
-import Engine.Constants;
+import Engine.Infrastructure.Constants;
 import Engine.Noise.SimplexNoise;
 import com.jogamp.nativewindow.util.Point;
 
@@ -89,7 +89,7 @@ public class TerrainGenerator {
     {
         double dX = (double)x/Constants.ChunkSize;
         double dY = (double)y/Constants.ChunkSize;
-        System.out.print("X ="+dX+"Y =" +dY +"\n");
+       // System.out.print("X ="+dX+"Y =" +dY +"\n");
         int resolutionZoomed = resolution * Constants.ChunkSize;
         int borderthickness = resolutionZoomed/10;
 
@@ -106,7 +106,7 @@ public class TerrainGenerator {
             int iDist = x > resolutionZoomed - borderthickness ? resolutionZoomed - x : x;
             int jDist = y >  resolutionZoomed - borderthickness ? resolutionZoomed - y : y;
             int edgePosition = iDist > jDist ? jDist : iDist;
-            System.out.print(String.format("edgePosition = {0}\n", edgePosition));
+            //System.out.print(String.format("edgePosition = {0}\n", edgePosition));
             result *= (float) edgePosition / (resolutionZoomed/10);
         }
         if (result <= 0.5) {

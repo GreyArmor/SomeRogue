@@ -1,4 +1,4 @@
-package Engine;
+package Engine.Infrastructure;
 
 import Engine.Components.IComponent;
 

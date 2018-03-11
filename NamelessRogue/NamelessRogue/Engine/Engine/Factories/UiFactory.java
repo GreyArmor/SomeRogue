@@ -1,6 +1,6 @@
 package Engine.Factories;
 
-import Engine.Entity;
+import Engine.Infrastructure.Entity;
 
 /**
  * Created by Admin on 16.06.2017.

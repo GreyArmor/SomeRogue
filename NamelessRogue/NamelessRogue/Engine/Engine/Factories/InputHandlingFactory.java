@@ -1,6 +1,6 @@
 package Engine.Factories;
 
-import Engine.Entity;
+import Engine.Infrastructure.Entity;
 import Engine.Components.Interaction.InputComponent;
 import abstraction.IEntity;
 

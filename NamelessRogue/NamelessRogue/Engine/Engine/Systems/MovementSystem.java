@@ -3,6 +3,7 @@ package Engine.Systems;
 import Engine.Components.Interaction.MoveToCommand;
 import Engine.Components.ChunksAndTiles.ChunkData;
 import Engine.Components.ChunksAndTiles.Tile;
+import Engine.Infrastructure.Entity;
 import abstraction.IChunkProvider;
 
 import Engine.Components.Physical.Position;
@@ -30,7 +31,7 @@ public class MovementSystem implements ISystem {
 					Tile newTile = worldProvider.getTile(moveCommand.p.getX(), moveCommand.p.getY());
 
 					oldTile.getEntitiesOnTile().remove(entity);
-					newTile.getEntitiesOnTile().add(entity);
+					newTile.getEntitiesOnTile().add((Entity)entity);
 
 					oldTile.setPassable(true);
 					newTile.setPassable(false);

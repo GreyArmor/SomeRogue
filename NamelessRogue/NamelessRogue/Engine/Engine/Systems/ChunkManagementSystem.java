@@ -4,7 +4,7 @@ import Engine.Components.ChunksAndTiles.Chunk;
 import Engine.Components.Interaction.Player;
 import Engine.Components.Physical.Position;
 import Engine.Components.ChunksAndTiles.ChunkData;
-import Engine.Constants;
+import Engine.Infrastructure.Constants;
 import abstraction.IEntity;
 import abstraction.ISystem;
 import abstraction.IChunkProvider;
@@ -62,14 +62,16 @@ public class ChunkManagementSystem implements ISystem {
                 ArrayList<Point> keysToRemove = new ArrayList<>();
                 for (Point key : worldProvider.getRealityBubbleChunks().keySet()) {
                     double dist = Math.abs(key.getX() - currentChunkKey.getX()) + Math.abs(key.getY() - currentChunkKey.getY());
-                    if (dist > Constants.RealityBubbleRangeInChunks) {
+                    if (dist > Constants.RealityBubbleRangeInChunks ) {
                         keysToRemove.add(key);
                     }
                 }
                 for (Point key : keysToRemove)
                 {
-                    worldProvider.getRealityBubbleChunks().get(key).Deactivate();
-                    worldProvider.getRealityBubbleChunks().remove(key);
+                    if( worldProvider.getRealityBubbleChunks().get(key).IsActive()) {
+                        worldProvider.getRealityBubbleChunks().get(key).Deactivate();
+                        worldProvider.getRealityBubbleChunks().remove(key);
+                    }
                 }
 
             }

@@ -1,6 +1,6 @@
 package Engine.Components.ChunksAndTiles;
 
-import Engine.TerrainTypes;
+import Engine.Infrastructure.TerrainTypes;
 
 /**
  * Created by Admin on 05.12.2017.
@@ -14,8 +14,8 @@ public class TileNoiseInterpreter {
         if (noiseValue<0){
             noiseValue=0;
         }
-        System.out.print(noiseValue);
-        System.out.print("\n");
+       // System.out.print(noiseValue);
+       // System.out.print("\n");
         TerrainTypes t = null;
         if(noiseValue>0.80) {
             t  = TerrainTypes.Snow;

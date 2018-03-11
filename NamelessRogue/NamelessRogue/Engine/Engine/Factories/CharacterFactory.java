@@ -12,7 +12,7 @@ import Engine.Components.Physical.Position;
 import Engine.Components.Rendering.Drawable;
 import Engine.Components.Stats.*;
 import Engine.Components.UI.Description;
-import Engine.Entity;
+import Engine.Infrastructure.Entity;
 
 public class CharacterFactory {
 	public static Entity CreateSimplePlayerCharacter(int x,int y)

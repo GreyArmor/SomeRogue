@@ -2,7 +2,7 @@ package Engine.Factories;
 
 import com.jogamp.nativewindow.util.Point;
 
-import Engine.Entity;
+import Engine.Infrastructure.Entity;
 import Engine.Components.Rendering.ConsoleCamera;
 import Engine.Components.Rendering.Screen;
 import data.GameSettings;

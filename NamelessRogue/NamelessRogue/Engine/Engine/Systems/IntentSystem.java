@@ -69,6 +69,7 @@ public class IntentSystem implements ISystem {
                                         }
                                     }
 
+
                                     if (entityThatOccupiedTile != null) {
                                         Door door = entityThatOccupiedTile.GetComponentOfType(Door.class);
                                         Character characterComponent = entityThatOccupiedTile.GetComponentOfType(Character.class);

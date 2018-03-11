@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import Engine.Constants;
+import Engine.Infrastructure.Constants;
 import Engine.Utility.Color;
 import com.jogamp.nativewindow.util.Point;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLException;
 
-import Engine.TerrainTypes;
+import Engine.Infrastructure.TerrainTypes;
 import Engine.Components.ChunksAndTiles.Tile;
 import Engine.Components.Rendering.ConsoleCamera;
 import Engine.Components.Rendering.Drawable;
