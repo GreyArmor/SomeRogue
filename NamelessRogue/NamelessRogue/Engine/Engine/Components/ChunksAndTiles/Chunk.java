@@ -6,9 +6,11 @@ import Engine.Serialization.SaveManager;
 import Engine.Utility.BoundingBox;
 import com.jogamp.nativewindow.util.Point;
 import abstraction.IBoundsProvider;
+import shell.EntryPoint;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class Chunk implements IBoundsProvider {
 	private Point worldPositionBottomLeftCorner;
@@ -115,8 +117,8 @@ public class Chunk implements IBoundsProvider {
 
 		String appPath = "";
 		try {
-			appPath = new File(".").getCanonicalPath();
-		} catch (IOException e) {
+			appPath = new File(EntryPoint.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getPath();
+		}catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
 		Tile[][] tiles = SaveManager.LoadChunk(appPath+"\\Chunks",
@@ -135,8 +137,8 @@ public class Chunk implements IBoundsProvider {
 	{
 		String appPath = "";
 		try {
-			appPath = new File(".").getCanonicalPath();
-		} catch (IOException e) {
+			appPath = new File(EntryPoint.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getPath();
+		}catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
 		System.out.print("Deactivate\n");
