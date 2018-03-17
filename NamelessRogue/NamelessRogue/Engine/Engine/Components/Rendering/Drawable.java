@@ -12,6 +12,8 @@ public class Drawable extends Component {
 		CharColor = charColor;
 	}
 
+	private boolean visible = true;
+
 	private char Representation;
 	private Engine.Utility.Color CharColor;
 
@@ -30,5 +32,13 @@ public class Drawable extends Component {
 
 	public Color getCharColor() {
 		return CharColor;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public boolean isVisible() {
+		return visible;
 	}
 }

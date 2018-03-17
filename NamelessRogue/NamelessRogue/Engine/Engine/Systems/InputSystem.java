@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import Engine.Components.Interaction.InputComponent;
+import Engine.Components.Interaction.InputReceiver;
 import Engine.Components.Interaction.Player;
 import Engine.Input.KeyIntentTraslator;
 import abstraction.IEntity;
@@ -20,18 +21,21 @@ public class InputSystem implements ISystem {
 		pressedKeys = new ArrayList<>();
 	}
 	long currentgmatime = 0;
+	private long previousGametimeForMove = 0;
 	@Override
 	public void Update(long gameTime, Game game){
-		for (IEntity entity : game.GetEntities()) {
-			InputComponent inputComponent = entity.GetComponentOfType(InputComponent.class);
-			Player player = entity.GetComponentOfType(Player.class);
-			if(player!=null && inputComponent!=null){
-				inputComponent.Intents.clear();
-				for (KeyEvent keyEvent : pressedKeys) {
-					inputComponent.Intents.addAll(KeyIntentTraslator.Translate(keyEvent.getKeyCode()));
+		if (gameTime - previousGametimeForMove > 60) {
+			previousGametimeForMove = gameTime;
+			for (IEntity entity : game.GetEntities()) {
+				InputComponent inputComponent = entity.GetComponentOfType(InputComponent.class);
+				InputReceiver receiver = entity.GetComponentOfType(InputReceiver.class);
+				if (receiver != null && inputComponent != null) {
+					for (KeyEvent keyEvent : pressedKeys) {
+						inputComponent.Intents.addAll(KeyIntentTraslator.Translate(keyEvent.getKeyCode()));
+					}
 				}
 			}
-		}	
+		}
 	}		
 
 	public void keyPressed(KeyEvent e) {

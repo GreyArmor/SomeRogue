@@ -14,9 +14,11 @@ import abstraction.ISystem;
 import abstraction.IChunkProvider;
 import shell.Game;
 
+import javax.sound.midi.Receiver;
+
 public class IntentSystem implements ISystem {
 
-    private long previousGametimeForMove = 0;
+
 
     @Override
     public void Update(long gameTime, Game game) {
@@ -33,9 +35,6 @@ public class IntentSystem implements ISystem {
                         case MoveTopRight:
                         case MoveBottomLeft:
                         case MoveBottomRight:
-                            if (gameTime - previousGametimeForMove > 60) {
-                                previousGametimeForMove = gameTime;
-
                                 Position position = entity.GetComponentOfType(Position.class);
                                 if (position != null) {
 
@@ -59,49 +58,78 @@ public class IntentSystem implements ISystem {
                                     }
 
                                     Tile tileToMoveTo = worldProvider.getTile(newX, newY);
+                                    Cursor cursor = entity.GetComponentOfType(Cursor.class);
 
-                                    IEntity entityThatOccupiedTile = null;
-                                    for (IEntity tileEntity : tileToMoveTo.getEntitiesOnTile()) {
-                                        OccupiesTile occupiesTile = tileEntity.GetComponentOfType(OccupiesTile.class);
-                                        if (occupiesTile != null) {
-                                            entityThatOccupiedTile = tileEntity;
-                                            break;
-                                        }
-                                    }
+                                    //if cursor is moving then it passes through everything
+                                    if (cursor != null) {
+                                        entity.AddComponent(new MoveToCommand(newX, newY, entity));
+                                    } else {
 
-
-                                    if (entityThatOccupiedTile != null) {
-                                        Door door = entityThatOccupiedTile.GetComponentOfType(Door.class);
-                                        Character characterComponent = entityThatOccupiedTile.GetComponentOfType(Character.class);
-                                        if (door != null) {
-                                            SimpleSwitch simpleSwitch = entityThatOccupiedTile.GetComponentOfType(SimpleSwitch.class);
-                                            if (simpleSwitch != null == simpleSwitch.isSwitchActive()) {
-                                                entityThatOccupiedTile.GetComponentOfType(Drawable.class).setRepresentation('o');
-                                                entityThatOccupiedTile.AddComponent(new ChangeSwitchStateCommand(simpleSwitch, false));
-                                                tileToMoveTo.setPassable(true);
-                                                game.WriteLineToConsole("Opened the door!");
-                                            } else {
-                                                entity.AddComponent(new MoveToCommand(newX, newY,entity));
+                                        IEntity entityThatOccupiedTile = null;
+                                        for (IEntity tileEntity : tileToMoveTo.getEntitiesOnTile()) {
+                                            OccupiesTile occupiesTile = tileEntity.GetComponentOfType(OccupiesTile.class);
+                                            if (occupiesTile != null) {
+                                                entityThatOccupiedTile = tileEntity;
+                                                break;
                                             }
                                         }
 
-                                        if(characterComponent!=null){
-                                            //TODO: if hostile
-                                            entity.AddComponent( new AttackCommand(entity, entityThatOccupiedTile));
-                                            //TODO: do something else if friendly: chat, trade, etc
 
+                                        if (entityThatOccupiedTile != null) {
+                                            Door door = entityThatOccupiedTile.GetComponentOfType(Door.class);
+                                            Character characterComponent = entityThatOccupiedTile.GetComponentOfType(Character.class);
+                                            if (door != null) {
+                                                SimpleSwitch simpleSwitch = entityThatOccupiedTile.GetComponentOfType(SimpleSwitch.class);
+                                                if (simpleSwitch != null == simpleSwitch.isSwitchActive()) {
+                                                    entityThatOccupiedTile.GetComponentOfType(Drawable.class).setRepresentation('o');
+                                                    entityThatOccupiedTile.AddComponent(new ChangeSwitchStateCommand(simpleSwitch, false));
+                                                    tileToMoveTo.setPassable(true);
+                                                    game.WriteLineToConsole("Opened the door!");
+                                                } else {
+                                                    entity.AddComponent(new MoveToCommand(newX, newY, entity));
+                                                }
+                                            }
+
+                                            if (characterComponent != null) {
+                                                //TODO: if hostile
+                                                entity.AddComponent(new AttackCommand(entity, entityThatOccupiedTile));
+                                                //TODO: do something else if friendly: chat, trade, etc
+
+                                            }
+                                        } else{
+                                            entity.AddComponent(new MoveToCommand(newX, newY, entity));
                                         }
-                                    } else {
-                                        entity.AddComponent(new MoveToCommand(newX, newY,entity));
                                     }
                                 }
-                            }
                             break;
+                        case LookAtMode:
+                            InputReceiver receiver = new InputReceiver();
+                            Player player = entity.GetComponentOfType(Player.class);
+                            Cursor cursor = entity.GetComponentOfType(Cursor.class);
+                            entity.RemoveComponentOfType(InputReceiver.class);
+                            if(player!=null)
+                            {
+                                IEntity cursorEntity = game.GetEntityByComponentClass(Cursor.class);
+                                cursorEntity.AddComponent(receiver);
+                                Drawable cursorDrawable = cursorEntity.GetComponentOfType(Drawable.class);
+                                cursorDrawable.setVisible(true);
+                                Position cursorPosition = cursorEntity.GetComponentOfType(Position.class);
+                                Position playerPosition = entity.GetComponentOfType(Position.class);
+                                cursorPosition.p.setX(playerPosition.p.getX());
+                                cursorPosition.p.setY(playerPosition.p.getY());
+
+                            }
+                            else if(cursor != null)
+                            {
+                                IEntity playerEntity = game.GetEntityByComponentClass(Player.class);
+                                playerEntity.AddComponent(receiver);
+                                Drawable cursorDrawable = entity.GetComponentOfType(Drawable.class);
+                                cursorDrawable.setVisible(false);
+
+                            }
                     }
-
-
-
                 }
+                inputComponent.Intents.clear();
             }
         }
     }

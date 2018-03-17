@@ -10,23 +10,23 @@ public class KeyIntentTraslator {
 		List<Intent> result = new ArrayList<Intent>();
 		
 		//TODO: add dictionary for actions, based on game config files
-		    switch(keyCode) { 
-		        case KeyEvent.VK_UP:
+		    switch(keyCode) {
+				case KeyEvent.VK_UP:
 				case KeyEvent.VK_NUMPAD8:
-		        	result.add(Intent.MoveUp);
-		            break;
+					result.add(Intent.MoveUp);
+					break;
 				case KeyEvent.VK_NUMPAD2:
-		        case KeyEvent.VK_DOWN:
-		        	result.add(Intent.MoveDown);
-		            break;
+				case KeyEvent.VK_DOWN:
+					result.add(Intent.MoveDown);
+					break;
 				case KeyEvent.VK_NUMPAD4:
-		        case KeyEvent.VK_LEFT:
-		        	result.add(Intent.MoveLeft);
-		            break;
+				case KeyEvent.VK_LEFT:
+					result.add(Intent.MoveLeft);
+					break;
 				case KeyEvent.VK_NUMPAD6:
-		        case KeyEvent.VK_RIGHT :
-		        	result.add(Intent.MoveRight);
-		            break;
+				case KeyEvent.VK_RIGHT:
+					result.add(Intent.MoveRight);
+					break;
 				case KeyEvent.VK_NUMPAD7:
 					result.add(Intent.MoveTopLeft);
 					break;
@@ -39,7 +39,10 @@ public class KeyIntentTraslator {
 				case KeyEvent.VK_NUMPAD3:
 					result.add(Intent.MoveBottomRight);
 					break;
-		     }	
+				case KeyEvent.VK_X:
+					result.add(Intent.LookAtMode);
+					break;
+			}
 		
 		return result;
 		

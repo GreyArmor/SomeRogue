@@ -17,4 +17,5 @@ public class ScreenTile extends Component {
     public Character Char;
     public  Engine.Utility.Color CharColor;
     public Engine.Utility.Color BackGroundColor;
+    public boolean isVisible;
 }

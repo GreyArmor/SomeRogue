@@ -2,28 +2,30 @@ package Engine.Systems;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import Engine.Components.Interaction.Player;
+import Engine.Components.Rendering.*;
 import Engine.Infrastructure.Constants;
+import Engine.Utility.BoundingBox;
 import Engine.Utility.Color;
+import Engine.Utility.PointUtil;
 import com.jogamp.nativewindow.util.Point;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLException;
 
 import Engine.Infrastructure.TerrainTypes;
 import Engine.Components.ChunksAndTiles.Tile;
-import Engine.Components.Rendering.ConsoleCamera;
-import Engine.Components.Rendering.Drawable;
 import Engine.Components.Interaction.InputComponent;
-import Engine.Components.Interaction.Player;
 import Engine.Components.Physical.Position;
-import Engine.Components.Rendering.Screen;
 import Engine.Components.ChunksAndTiles.ChunkData;
 import abstraction.IEntity;
 import abstraction.ISystem;
 import abstraction.IChunkProvider;
+import com.jogamp.opengl.math.FloatUtil;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
 import data.GameSettings;
@@ -122,7 +124,7 @@ public class RenderingSystem implements ISystem {
 		if(worldEntity!=null)
 		{
 			worldProvider = worldEntity.GetComponentOfType(ChunkData.class);
-		}		
+		}
 		for (IEntity entity : game.GetEntities()) {
 			
 			ConsoleCamera camera = entity.GetComponentOfType(ConsoleCamera.class);
@@ -130,6 +132,7 @@ public class RenderingSystem implements ISystem {
 			if(camera != null && screen != null && worldProvider!=null )
 			{
 				MoveCamera(game, camera);
+				fillcharacterBufferVisibility(game, screen,camera,game.getSettings(),worldProvider);
 				fillcharacterBuffersWithWorld(screen,camera,game.getSettings(),worldProvider);
 				fillcharacterBuffersWithWorldObjects(screen,camera,game.getSettings(), game);
 				
@@ -143,15 +146,47 @@ public class RenderingSystem implements ISystem {
 		IEntity input = game.GetEntityByComponentClass(InputComponent.class);
 		if(input!=null)
 		{
-			Position playerPosition = game.GetEntityByComponentClass(Player.class).GetComponentOfType(Position.class);
+			Position playerPosition = game.GetEntityByComponentClass(FollowedByCamera.class).GetComponentOfType(Position.class);
 			
 			Point p = camera.getPosition();
 			p.setX(playerPosition.p.getX() - game.getSettings().getWidth()/2);
 			p.setY(playerPosition.p.getY() - game.getSettings().getHeight()/2);
 		}
 	}
-	
-	
+
+	private void fillcharacterBufferVisibility(Game game ,Screen screen, ConsoleCamera camera, GameSettings settings, IChunkProvider world){
+		int camX = camera.getPosition().getX();
+		int camY = camera.getPosition().getY();
+		Position playerPosition = game.GetEntityByComponentClass(Player.class).GetComponentOfType(Position.class);
+		BoundingBox b = new BoundingBox(camera.getPosition(),new Point(settings.getWidth()+camX,settings.getHeight()+camY));
+
+		for(int x = 0; x<settings.getWidth(); x++) {
+			for (int y = 0; y < settings.getHeight(); y++) {
+				screen.ScreenBuffer[x][y].isVisible = false;
+			}
+		}
+
+		for(int x = camX; x<settings.getWidth()+camX; x++){
+			for(int y = camY; y<settings.getHeight()+camY; y++){
+				if(x==camX||x==(settings.getWidth()+camX-1) || y == camY  ||  y==(settings.getHeight()+camY-1)) {
+					ArrayList<Point> rayToBorder = PointUtil.getLine(playerPosition.p, new Point(x,y));
+					for (int i = 0; i < rayToBorder.size(); i++) {
+						Point raypoint = rayToBorder.get(i);
+						if(b.isPointInside(raypoint.getX(),raypoint.getY()))
+						{
+							Tile tileToDraw = world.getTile(raypoint.getX(), raypoint.getY());
+							Point screenPoint = camera.PointToScreen(raypoint.getX(), raypoint.getY());
+							screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].isVisible=true;
+							if(!tileToDraw.getPassable() && i!= 0)
+							{
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	
 	private void fillcharacterBuffersWithWorld(Screen screen, ConsoleCamera camera, GameSettings settings, IChunkProvider world){
 		int camX = camera.getPosition().getX();
@@ -163,102 +198,112 @@ public class RenderingSystem implements ISystem {
 
 		for(int x = camX; x<settings.getWidth()+camX; x++){
 		   for(int y = camY; y<settings.getHeight()+camY; y++){
-			   Tile tileToDraw = world.getTile(x, y);
 			   Point screenPoint = camera.PointToScreen(x,y);
-			   if(tileToDraw.getTerrainType()==TerrainTypes.Water)
-			   {		      
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='~';
+			   if( screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].isVisible) {
+				   Tile tileToDraw = world.getTile(x, y);
 
-				   float waveValue1 = (float) ((Math.sin(((x+y)/1.5)+angle)) + 1) / 2;
-				   float waveValue2 = (float) ((Math.sin(((x+y))+angle))/2 + 1) / 2;
-				   float waveValue3 = (float) ((Math.sin(((x+y)/3)+angle)) + 1) / 2;
-				   float resultingColor =0.3f + (0.5f *(waveValue1+waveValue2+waveValue3)/3);
+				   if (tileToDraw.getTerrainType() == TerrainTypes.Water) {
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = '~';
 
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor= new Color(0, 0, 255);
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color(0, resultingColor, resultingColor);
-			   }
-			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Road)
-			   {
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='.';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0.5,0.5,0.5);
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
-			   }
-			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Dirt)
-			   {
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='&';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor= new Color(1f,1f,0);
-				    screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
-			   }
+					   float waveValue1 = (float) ((Math.sin(((x + y) / 1.5) + angle)) + 1) / 2;
+					   float waveValue2 = (float) ((Math.sin(((x + y)) + angle)) / 2 + 1) / 2;
+					   float waveValue3 = (float) ((Math.sin(((x + y) / 3) + angle)) + 1) / 2;
+					   float resultingColor = 0.3f + (0.5f * (waveValue1 + waveValue2 + waveValue3) / 3);
 
-			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Grass)
-			   {
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='.';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0,1f,0);
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
-			   }
-
-			   else  if(tileToDraw.getTerrainType()==TerrainTypes.HardRocks)
-			   {
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='.';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0.2,0.2,0.2);
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
-			   }
-
-			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Rocks)
-			   {
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='.';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0.5,0.5,0.5);
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
-			   }
-
-			   else  if(tileToDraw.getTerrainType()==TerrainTypes.LightRocks)
-			   {
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='.';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(0.8,0.8,0.8);
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
-			   }
-			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Sand)
-			   {
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='~';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(1f,1f,0);
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
-			   }
-			   else  if(tileToDraw.getTerrainType()==TerrainTypes.Snow)
-			   {
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char='s';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color(1f,1f,1f);
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = new Color(0, 0, 255);
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor = new Color(0, resultingColor, resultingColor);
+				   } else if (tileToDraw.getTerrainType() == TerrainTypes.Road) {
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = '.';
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = new Color(0.5, 0.5, 0.5);
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor = new Color();
+				   } else if (tileToDraw.getTerrainType() == TerrainTypes.Dirt) {
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = '&';
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = new Color(1f, 1f, 0);
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor = new Color();
+				   } else if (tileToDraw.getTerrainType() == TerrainTypes.Grass) {
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = '.';
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = new Color(0, 1f, 0);
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor = new Color();
+				   } else if (tileToDraw.getTerrainType() == TerrainTypes.HardRocks) {
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = '.';
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = new Color(0.2, 0.2, 0.2);
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor = new Color();
+				   } else if (tileToDraw.getTerrainType() == TerrainTypes.Rocks) {
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = '.';
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = new Color(0.5, 0.5, 0.5);
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor = new Color();
+				   } else if (tileToDraw.getTerrainType() == TerrainTypes.LightRocks) {
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = '.';
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = new Color(0.8, 0.8, 0.8);
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor = new Color();
+				   } else if (tileToDraw.getTerrainType() == TerrainTypes.Sand) {
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = '~';
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = new Color(1f, 1f, 0);
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor = new Color();
+				   } else if (tileToDraw.getTerrainType() == TerrainTypes.Snow) {
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = 's';
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = new Color(1f, 1f, 1f);
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor = new Color();
+				   } else {
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = ' ';
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = new Color();
+					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor = new Color();
+				   }
 			   }
 			   else
 			   {
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char=' ';
-				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=new Color();
-				    screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor=new Color();
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = ' ';
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = new Color();
+				   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor = new Color();
 			   }
 			   
 		   }
 		}
 	}
 	
-	 private void fillcharacterBuffersWithWorldObjects(Screen screen, ConsoleCamera camera, GameSettings settings, Game game){
-		for (IEntity entity : game.GetEntities()) {
-			
-			   Position position = entity.GetComponentOfType(Position.class);
-			   Drawable drawable = entity.GetComponentOfType(Drawable.class);
-			   if(drawable!=null && position!=null)
-			   {
-				   
-				   Point screenPoint = camera.PointToScreen(position.p.getX(),position.p.getY());
-				   int x = screenPoint.getX();
-				   int y = screenPoint.getY();
-				   if(x>=0 && x<settings.getWidth() && y>=0 && y < settings.getHeight())
-				   {
-					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char=drawable.getRepresentation();
-					   screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor=drawable.getCharColor();
-				   }
-			   }
-		}
-	}
+	 private void fillcharacterBuffersWithWorldObjects(Screen screen, ConsoleCamera camera, GameSettings settings, Game game) {
+		 for (IEntity entity : game.GetEntities()) {
+
+			 Position position = entity.GetComponentOfType(Position.class);
+			 Drawable drawable = entity.GetComponentOfType(Drawable.class);
+			 LineToPlayer lineToPlayer = entity.GetComponentOfType(LineToPlayer.class);
+			 if (drawable != null && position != null) {
+				 if (drawable.isVisible()) {
+					 Point screenPoint = camera.PointToScreen(position.p.getX(), position.p.getY());
+					 int x = screenPoint.getX();
+					 int y = screenPoint.getY();
+						 if (x >= 0 && x < settings.getWidth() && y >= 0 && y < settings.getHeight()) {
+							 if( screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].isVisible) {
+							 screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = drawable.getRepresentation();
+							 screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = drawable.getCharColor();
+							 }
+							 else {
+								 screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = ' ';
+								 screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = new Color();
+								 screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].BackGroundColor = new Color();
+							 }
+						 }
+
+				 }
+			 }
+			 if (drawable != null && position != null && lineToPlayer != null) {
+				 if (drawable.isVisible()) {
+					 Position playerPosition = game.GetEntityByComponentClass(Player.class).GetComponentOfType(Position.class);
+					 ArrayList<Point> line = PointUtil.getLine(playerPosition.p, position.p);
+					 for (int i = 1; i < line.size()-1; i++) {
+						 Point p = line.get(i);
+						 Point screenPoint = camera.PointToScreen(p.getX(), p.getY());
+						 int x = screenPoint.getX();
+						 int y = screenPoint.getY();
+						 if (x >= 0 && x < settings.getWidth() && y >= 0 && y < settings.getHeight()) {
+							 screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].Char = 'x';
+							 screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].CharColor = drawable.getCharColor();
+						 }
+					 }
+				 }
+			 }
+		 }
+	 }
 	
 	
 	private void renderScreen(Game gameInstance, Screen screen, GameSettings settings)
@@ -402,4 +447,8 @@ public class RenderingSystem implements ISystem {
 
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 	}
+
+
+
+
 }

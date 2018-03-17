@@ -10,5 +10,5 @@ public enum Intent {
 	MoveBottomRight,
 	MoveRight,
 	PlaceItem,
-	DropItem
+    LookAtMode, DropItem
 }

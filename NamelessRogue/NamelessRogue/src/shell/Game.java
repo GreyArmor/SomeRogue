@@ -170,7 +170,7 @@ public class Game extends JFrame implements GLEventListener,java.awt.event.KeyLi
 		//  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 5,307*Constants.ChunkSize));
 		  Entities.add(CharacterFactory.CreateBlankNpc(109* Constants.ChunkSize - 7,307*Constants.ChunkSize));
 		  Entities.add(ItemFactory.CreateItem());
-
+		  Entities.add(GameInitializer.CreateCursor());
 
 		  //
 
