@@ -17,8 +17,9 @@ public class Chunk implements IBoundsProvider {
 	private transient  ChunkData chunkContainer;
 
 	private Tile[][] chunkTiles;
-	private transient  BoundingBox boundingBox;
+	private transient BoundingBox boundingBox;
 	private transient boolean isActive;
+	private transient boolean loaded = false;
 
 	public Chunk() {
 	}
@@ -105,10 +106,12 @@ public class Chunk implements IBoundsProvider {
 	public void Activate() {
 		System.out.print("Activate\n");
 		isActive = true;
-		chunkTiles = new Tile[Constants.ChunkSize][Constants.ChunkSize];
-		if(!LoadFromDisk())
-		{
-			FillWithTiles(chunkContainer.getWorldGenerator());
+		if(!loaded) {
+			chunkTiles = new Tile[Constants.ChunkSize][Constants.ChunkSize];
+			if (!LoadFromDisk()) {
+				FillWithTiles(chunkContainer.getWorldGenerator());
+			}
+			loaded = true;
 		}
 
 	}
@@ -129,12 +132,14 @@ public class Chunk implements IBoundsProvider {
 			System.out.print("LoadFromDisk true\n");
 			return true;
 		}
+
 		System.out.print("LoadFromDisk false\n");
 		return false;
 	}
 
-	public void Deactivate()
-	{
+	public void Deactivate() {
+		//todo: do not unlod chunks for now, just deactivate
+		/*
 		String appPath = "";
 		try {
 			appPath = new File(EntryPoint.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getPath();
@@ -144,9 +149,9 @@ public class Chunk implements IBoundsProvider {
 		System.out.print("Deactivate\n");
 		SaveManager.SaveChunk(appPath+"\\Chunks",this,
 				String.valueOf(worldPositionBottomLeftCorner.getX()) + "_" + String.valueOf(worldPositionBottomLeftCorner.getY()));
-
+*/
 		isActive = false;
-		chunkTiles = null;
+	//	chunkTiles = null;
 	}
 
 	public void setTile(int x, int y, Tile tile) {
