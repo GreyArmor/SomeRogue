@@ -13,6 +13,7 @@ import Engine.Infrastructure.Constants;
 import Engine.Utility.BoundingBox;
 import Engine.Utility.Color;
 import Engine.Utility.PointUtil;
+import Engine.Utility.WorldFovProvider;
 import com.jogamp.nativewindow.util.Point;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLException;
@@ -29,6 +30,9 @@ import com.jogamp.opengl.math.FloatUtil;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
 import data.GameSettings;
+import rlforj.los.IFovAlgorithm;
+import rlforj.los.ILosAlgorithm;
+import rlforj.los.PrecisePermissive;
 import shell.Game;
 
 public class RenderingSystem implements ISystem {
@@ -166,26 +170,32 @@ public class RenderingSystem implements ISystem {
 			}
 		}
 
-		for(int x = camX; x<settings.getWidth()+camX; x++){
-			for(int y = camY; y<settings.getHeight()+camY; y++){
-				if(x==camX||x==(settings.getWidth()+camX-1) || y == camY  ||  y==(settings.getHeight()+camY-1)) {
-					ArrayList<Point> rayToBorder = PointUtil.getLine(playerPosition.p, new Point(x,y));
-					for (int i = 0; i < rayToBorder.size(); i++) {
-						Point raypoint = rayToBorder.get(i);
-						if(b.isPointInside(raypoint.getX(),raypoint.getY()))
-						{
-							Tile tileToDraw = world.getTile(raypoint.getX(), raypoint.getY());
-							Point screenPoint = camera.PointToScreen(raypoint.getX(), raypoint.getY());
-							screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].isVisible=true;
-							if(!tileToDraw.getPassable() && i!= 0)
-							{
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
+
+		IFovAlgorithm fov = new PrecisePermissive();
+
+		WorldFovProvider wfp = new WorldFovProvider(world,screen,camera,settings);
+		fov.visitFieldOfView(wfp,playerPosition.p.getX(),playerPosition.p.getY(),60);
+
+//		for(int x = camX; x<settings.getWidth()+camX; x++){
+//			for(int y = camY; y<settings.getHeight()+camY; y++){
+//				if(x==camX||x==(settings.getWidth()+camX-1) || y == camY  ||  y==(settings.getHeight()+camY-1)) {
+//					ArrayList<Point> rayToBorder = PointUtil.getLine(playerPosition.p, new Point(x,y));
+//					for (int i = 0; i < rayToBorder.size(); i++) {
+//						Point raypoint = rayToBorder.get(i);
+//						if(b.isPointInside(raypoint.getX(),raypoint.getY()))
+//						{
+//							Tile tileToDraw = world.getTile(raypoint.getX(), raypoint.getY());
+//							Point screenPoint = camera.PointToScreen(raypoint.getX(), raypoint.getY());
+//							screen.ScreenBuffer[screenPoint.getX()][screenPoint.getY()].isVisible=true;
+//							if(!tileToDraw.getPassable() && i!= 0)
+//							{
+//								break;
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
 	}
 	
 	private void fillcharacterBuffersWithWorld(Screen screen, ConsoleCamera camera, GameSettings settings, IChunkProvider world){

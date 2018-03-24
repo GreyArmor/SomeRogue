@@ -13,5 +13,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="JOGL" level="project" />
     <orderEntry type="library" name="jackson-core-2.9.4" level="project" />
+    <orderEntry type="library" name="rlforj.0.3" level="project" />
   </component>
 </module>
